@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Τουριστικός Οδηγός</string>
+    <string name="island">Λέσβος</string>
+    <string name="island_info">"Είναι ένα εύφορο νησί, κατάφυτο από πευκώνες και ελαιώνες, με έντονες εναλλαγές των τοπίων. "</string>
+    <string name="tomain">Ας εξερευνήσουμε</string>
+</resources>
