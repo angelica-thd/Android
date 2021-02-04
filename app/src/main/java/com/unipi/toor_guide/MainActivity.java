@@ -1,52 +1,108 @@
 package com.unipi.toor_guide;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
-    ConstraintLayout constraintLayout;
-    ImageView imageView;
+    private long backPressedTime;
+    private Toast backToast;
+    BottomNavigationView bottomBar;
+
+    LinearLayout cardholder;
+    CardView cardview;
+    LinearLayout.LayoutParams llayoutparams;
+    ImageView cardimage;
+    TextView cardtext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        constraintLayout = findViewById(R.id.constraintLayout);
-        constraintLayout.setBackgroundColor(Color.BLACK);
-        imageView=findViewById(R.id.welcome_img);
-        imageView.setImageResource(R.drawable.testing_img);
-    }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemUI();
+        FloatingActionButton fab = findViewById(R.id.settingsbutton);
+        fab.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), SettingsActivity.class)));
+
+
+        bottomBar=findViewById(R.id.bottombar);
+        bottomBar.setOnNavigationItemSelectedListener(item -> {
+            if(item.getItemId()==R.id.home){
+                return true;
+            }
+            if(item.getItemId()==R.id.history){
+                startActivity(new Intent(getApplicationContext(),HistoryActivity.class));
+                overridePendingTransition(0,0);
+                return true;
+            }
+            if(item.getItemId()==R.id.Tours){
+                startActivity(new Intent(getApplicationContext(), CreateTourActivity.class));
+                overridePendingTransition(0,0);
+                return true;
+            }
+            return false;
+        });
+
+        cardholder=findViewById(R.id.cardholder);
+        llayoutparams = new LinearLayout.LayoutParams(
+                300,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        llayoutparams.setMargins(20,0,20,0);
+        for (int i=0; i<7;i++){
+            cardview=new CardView(this);
+            cardview.setRadius(0);
+            cardview.setPadding(0, 0, 0, 0);
+            cardview.setPreventCornerOverlap(false);
+            cardview.setBackgroundResource(R.drawable.rectangled);
+
+            cardimage=new ImageView(this);
+            cardimage.setBackgroundResource(R.drawable.testing_img);
+            cardimage.setScaleType(ImageView.ScaleType.FIT_XY);
+            cardview.addView(cardimage);
+
+            cardtext = new TextView(this);
+            cardtext.setText(R.string.sights_textview);
+            cardtext.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            cardtext.setTextColor(Color.WHITE);
+            cardtext.setPadding(0,430,60,0);
+            cardtext.setGravity(Gravity.END);
+
+            cardview.addView(cardtext);
+
+            cardview.setOnClickListener(v -> {
+
+            });
+
+            cardholder.addView(cardview,llayoutparams);
         }
     }
 
-    private void hideSystemUI() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-    }
-
-
-    public void to_main_activity(View view){
-
+    @Override
+    public void onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()){
+            backToast.cancel();
+            super.onBackPressed();
+            finishAffinity();
+        }else {
+            backToast = Toast.makeText(getApplicationContext(),"Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressedTime = System.currentTimeMillis();
     }
 
 }

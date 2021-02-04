@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WelcomeActivity">
+
+
+    <ImageView
+        android:id="@+id/welcome_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:onClick="to_main_activity"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/rectangled"
+        android:contentDescription="@string/island" />
+
+    <TextView
+        android:id="@+id/textView_Info"
+        android:layout_width="335dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="28dp"
+        android:gravity="center_vertical"
+        android:text="@string/island_info"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@+id/start_button"
+        app:layout_constraintStart_toStartOf="@+id/textView_Title"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Title" />
+
+    <TextView
+        android:id="@+id/textView_Title"
+        android:layout_width="262dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="508dp"
+        android:layout_marginBottom="7dp"
+        android:gravity="center_vertical"
+        android:text="@string/island"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textView_Info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="221dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/rectangled"
+        android:gravity="center|center_horizontal"
+        android:onClick="to_main_activity"
+        android:text="@string/tomain"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_Info" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

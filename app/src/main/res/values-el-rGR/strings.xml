@@ -4,4 +4,10 @@
     <string name="island">Λέσβος</string>
     <string name="island_info">"Είναι ένα εύφορο νησί, κατάφυτο από πευκώνες και ελαιώνες, με έντονες εναλλαγές των τοπίων. "</string>
     <string name="tomain">Ας εξερευνήσουμε</string>
+    <string name="search_bottom_bar">Αναζήτηση</string>
+    <string name="tours_bottom_bar">Προορισμοί</string>
+    <string name="history_bottom_bar">Ιστορικό</string>
+    <string name="settings_button">Ρυθμίσεις</string>
+    <string name="sights_textview">Αξιοθέατα</string>
+    <string name="home_bottom_bar">Αρχική</string>
 </resources>

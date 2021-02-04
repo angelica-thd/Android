@@ -3,4 +3,10 @@
     <string name="island">Lesbos</string>
     <string name="island_info">It is a fertile island, overgrown with pine trees and olive groves, with intense landscapes.</string>
     <string name="tomain">Let \'s explore</string>
+    <string name="home_bottom_bar">Home</string>
+    <string name="search_bottom_bar">Search</string>
+    <string name="tours_bottom_bar">Tours</string>
+    <string name="history_bottom_bar">History</string>
+    <string name="settings_button">Settings</string>
+    <string name="sights_textview">Sights</string>
 </resources>
