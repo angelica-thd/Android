@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TourGuide">
+        <activity android:name=".SearchActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".HistoryActivity" />
         <activity android:name=".CreateTourActivity" />

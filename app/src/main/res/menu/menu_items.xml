@@ -6,9 +6,9 @@
         android:title="@string/home_bottom_bar" />
 
     <item
-        android:id="@+id/history"
-        android:icon="@drawable/ic_baseline_history_24"
-        android:title="@string/history_bottom_bar" />
+        android:id="@+id/search"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="@string/search_bottom_bar" />
 
     <item
         android:id="@+id/Tours"

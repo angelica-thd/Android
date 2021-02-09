@@ -40,12 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         bottomBar=findViewById(R.id.bottombar);
+        bottomBar.getMenu().getItem(0).setChecked(true);
         bottomBar.setOnNavigationItemSelectedListener(item -> {
-            if(item.getItemId()==R.id.home){
-                return true;
-            }
-            if(item.getItemId()==R.id.history){
-                startActivity(new Intent(getApplicationContext(),HistoryActivity.class));
+            if(item.getItemId()==R.id.search){
+                startActivity(new Intent(getApplicationContext(),SearchActivity.class));
                 overridePendingTransition(0,0);
                 return true;
             }
@@ -54,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(0,0);
                 return true;
             }
-            return false;
+            return item.getItemId() == R.id.home;
         });
 
         cardholder=findViewById(R.id.cardholder);

@@ -7,29 +7,31 @@ import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class CreateTourActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
     BottomNavigationView bottomBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_tour_activity);
+        setContentView(R.layout.activity_search);
 
         bottomBar=findViewById(R.id.bottombar);
-        bottomBar.getMenu().getItem(2).setChecked(true);
+        bottomBar.getMenu().getItem(1).setChecked(true);
         bottomBar.setOnNavigationItemSelectedListener(item -> {
             if(item.getItemId()==R.id.home){
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 overridePendingTransition(0,0);
                 return true;
             }
-            if(item.getItemId()==R.id.search){
-                startActivity(new Intent(getApplicationContext(),SearchActivity.class));
+            if(item.getItemId()==R.id.Tours){
+                startActivity(new Intent(getApplicationContext(),CreateTourActivity.class));
                 overridePendingTransition(0,0);
                 return true;
             }
-            return item.getItemId() == R.id.Tours;
+            return item.getItemId() == R.id.search;
         });
     }
+
 
     @Override
     public void onBackPressed() {
