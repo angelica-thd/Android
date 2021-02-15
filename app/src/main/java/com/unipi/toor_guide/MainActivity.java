@@ -2,6 +2,7 @@ package com.unipi.toor_guide;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 
 import android.content.ContentValues;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Context mainactivity = this;
         storageRef = FirebaseStorage.getInstance().getReference();
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //night mode ui is not supported
 
         remoteConfig = FirebaseRemoteConfig.getInstance();
         remoteConfig.setDefaultsAsync(R.xml.config_settings);
@@ -71,10 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         firedb = FirebaseDatabase.getInstance();
         ref = firedb.getReference();
-       //east = firedb.getReference("East");
-       // west = firedb.getReference("West");
-        //north = firedb.getReference("North");
-       // south = firedb.getReference("South");
 
 
         bottomBar = findViewById(R.id.bottombar);
@@ -162,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         cardtext.setText(name);
         cardtext.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         cardtext.setTextColor(Color.WHITE);
-        cardtext.setPadding(10,430,20,0);
+        cardtext.setPadding(10,430,10,0);
         cardtext.setGravity(Gravity.END);
 
         cardview.addView(cardtext);

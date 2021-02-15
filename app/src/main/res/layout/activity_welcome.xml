@@ -12,14 +12,16 @@
         android:id="@+id/welcome_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/island"
         android:onClick="to_main_activity"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/rectangled"
-        android:contentDescription="@string/island" />
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/rectangled" />
 
     <TextView
         android:id="@+id/textView_Info"
@@ -40,7 +42,7 @@
         android:layout_width="262dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="508dp"
+        android:layout_marginTop="400dp"
         android:layout_marginBottom="7dp"
         android:gravity="center_vertical"
         android:text="@string/island"
