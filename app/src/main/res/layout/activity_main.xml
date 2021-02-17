@@ -10,6 +10,16 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
+    <ProgressBar
+        android:id="@+id/progress_view"
+        style="@android:style/Widget.Holo.Light.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:progressTint="@color/steelblue"
+        app:layout_constraintBottom_toBottomOf="@+id/horizontalScrollView"
+        app:layout_constraintStart_toStartOf="@+id/horizontalScrollView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottombar"
@@ -74,16 +84,19 @@
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="0.039">
+
+
 
         <LinearLayout
             android:id="@+id/cardholder"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
 
             <!--
                     <androidx.cardview.widget.CardView

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout.LayoutParams llayoutparams;
     ImageView cardimage;
     TextView cardtext;
+    ProgressBar progressBar;
 
 
     @Override
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Context mainactivity = this;
+        progressBar = findViewById(R.id.progress_view);
+        progressBar.setVisibility(View.VISIBLE);
         storageRef = FirebaseStorage.getInstance().getReference();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //night mode ui is not supported
 
@@ -99,35 +103,50 @@ public class MainActivity extends AppCompatActivity {
         llayoutparams.setMargins(20,0,20,0);
 
         List<String> names = new ArrayList<String>();
+        List<String> desc = new ArrayList<>();
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int count = 0;
                 Log.i("datasnapshot","cool");
                 for (DataSnapshot snap: snapshot.getChildren()){
                     for(DataSnapshot  sight : snap.child("Beaches").getChildren()){
                         String beach = String.valueOf(sight.getKey());
                         if(!names.contains(beach))  names.add(beach);
+                        desc.add(String.valueOf(sight.child("Info").getValue()));
                     }
                     for (DataSnapshot sight : snap.child("Villages").getChildren()) {
-                        String beach = String.valueOf(sight.getKey());
-                        if(!names.contains(beach))  names.add(beach);
+                        String village = String.valueOf(sight.getKey());
+                        if(!names.contains(village))  names.add(village);
+                        desc.add(String.valueOf(sight.child("Info").getValue()));
                     }
                     Log.i("storage",String.valueOf(names));
                 }
 
-                for(String name : names){
-                    String imgname = name.toLowerCase();
+                for(int i=0; i<names.size(); i++){
+                    count+=1;
+                    int progress =  Math.round(count/names.size());
+
+                    String imgname = names.get(i).toLowerCase();
                     if (imgname.contains(" ")) imgname = imgname.replace(" ","_");
+                    String imgpath = imgname;
                     imgname = (new StringBuilder().append(imgname).append(".jpg")).toString();
                     Log.i("imagename",imgname);
                     try{
-                        File localfile = File.createTempFile("tmp","jpg");
+                        File localfile = File.createTempFile("tmp","jpg") ;
                         StorageReference imgref = storageRef.child("img/"+ imgname);
-                        imgref.getFile(localfile).addOnSuccessListener(taskSnapshot ->cards(mainactivity,BitmapFactory.decodeFile(localfile.getAbsolutePath()),name));
+                        int finalI = i;
+                        imgref.getFile(localfile).addOnSuccessListener(taskSnapshot ->cards(mainactivity,BitmapFactory.decodeFile(localfile.getAbsolutePath()),names.get(finalI),desc.get(finalI),imgpath));
+
                     }catch (IOException e){
                         e.printStackTrace();
                     }
+                    if(progress<1){
+                        progressBar.setProgress(progress);
+                        Log.i("progress",String.valueOf(progress));
+                    }
+                    else progressBar.setVisibility(View.INVISIBLE);
                 }
             }
             @Override
@@ -138,13 +157,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    public void cards(Context context, Bitmap background, String name){
+    public void cards(Context context, Bitmap background, String name,String description, String imgpath){
         cardview=new CardView(context);
         cardview.setRadius(0);
         cardview.setPadding(0, 0, 0, 0);
         cardview.setPreventCornerOverlap(false);
         cardview.setBackgroundResource(R.drawable.rectangled);
+
 
         cardimage=new ImageView(context);
         cardimage.setImageBitmap(background);
@@ -164,8 +183,9 @@ public class MainActivity extends AppCompatActivity {
         cardtext.setGravity(Gravity.END);
 
         cardview.addView(cardtext);
+        String finalName = name;
         cardview.setOnClickListener(v -> {
-
+            startActivity(new Intent(this,InfoActivity.class).putExtra("id", finalName).putExtra("description",description).putExtra("path",imgpath));
         });
 
         cardholder.addView(cardview,llayoutparams);
