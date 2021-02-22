@@ -109,17 +109,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int count = 0;
+                boolean vill = false;
                 Log.i("datasnapshot","cool");
                 for (DataSnapshot snap: snapshot.getChildren()){
                     for(DataSnapshot  sight : snap.child("Beaches").getChildren()){
                         String beach = String.valueOf(sight.getKey());
                         if(!names.contains(beach))  names.add(beach);
                         desc.add(String.valueOf(sight.child("Info").getValue()));
+                        vill = false;
                     }
                     for (DataSnapshot sight : snap.child("Villages").getChildren()) {
                         String village = String.valueOf(sight.getKey());
                         if(!names.contains(village))  names.add(village);
                         desc.add(String.valueOf(sight.child("Info").getValue()));
+                        vill = true;
                     }
                     Log.i("storage",String.valueOf(names));
                 }
@@ -137,7 +140,14 @@ public class MainActivity extends AppCompatActivity {
                         File localfile = File.createTempFile("tmp","jpg") ;
                         StorageReference imgref = storageRef.child("img/"+ imgname);
                         int finalI = i;
-                        imgref.getFile(localfile).addOnSuccessListener(taskSnapshot ->cards(mainactivity,BitmapFactory.decodeFile(localfile.getAbsolutePath()),names.get(finalI),desc.get(finalI),imgpath));
+                        String finalImgname = imgname;
+                        boolean finalVill = vill;
+                        imgref.getFile(localfile).addOnSuccessListener(taskSnapshot ->cards(mainactivity,
+                                BitmapFactory.decodeFile(localfile.getAbsolutePath()),
+                                names.get(finalI),
+                                desc.get(finalI),
+                                finalImgname,
+                                finalVill));
 
                     }catch (IOException e){
                         e.printStackTrace();
@@ -157,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void cards(Context context, Bitmap background, String name,String description, String imgpath){
+    public void cards(Context context, Bitmap background, String name,String description, String imgpath,boolean village){
         cardview=new CardView(context);
         cardview.setRadius(0);
         cardview.setPadding(0, 0, 0, 0);
@@ -185,7 +195,10 @@ public class MainActivity extends AppCompatActivity {
         cardview.addView(cardtext);
         String finalName = name;
         cardview.setOnClickListener(v -> {
-            startActivity(new Intent(this,InfoActivity.class).putExtra("id", finalName).putExtra("description",description).putExtra("path",imgpath));
+            startActivity(new Intent(this,InfoActivity.class).putExtra("id", finalName).
+                    putExtra("description",description).
+                    putExtra("path",imgpath).
+                    putExtra("village",village));
         });
 
         cardholder.addView(cardview,llayoutparams);

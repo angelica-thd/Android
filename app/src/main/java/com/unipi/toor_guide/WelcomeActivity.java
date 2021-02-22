@@ -21,6 +21,7 @@ public class WelcomeActivity extends AppCompatActivity {
         constraintLayout.setBackgroundColor(Color.BLACK);
         imageView=findViewById(R.id.welcome_img);
         imageView.setImageResource(R.drawable.testing_img);
+
     }
 
     @Override

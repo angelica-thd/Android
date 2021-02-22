@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    >
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/sight_name"
+            android:layout_width="120dp"
+            android:layout_height="43dp"
+            android:gravity="center"
+            android:text="Sight name"
+            android:textAlignment="center"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/add2tourButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:backgroundTint="#00FFFFFF"
+                android:onClick="add2tour"
+                android:src="@drawable/ic_baseline_add_24"
+                android:tint="@color/black" />
+
+            <ImageButton
+                android:id="@+id/findonMap"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#00FFFFFF"
+                android:onClick="findonMap"
+                android:src="@drawable/ic_baseline_not_listed_location_24"
+                android:tint="@color/black"
+
+                />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/sight_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Sight info"
+        android:scrollbars = "vertical"
+        />
+
+
+
+</LinearLayout>

@@ -4,9 +4,14 @@
     <string name="island_info">It is a fertile island, overgrown with pine trees and olive groves, with intense landscapes.</string>
     <string name="tomain">Let \'s explore</string>
     <string name="home_bottom_bar">Home</string>
+    <string name="heart_bottom_bar">Favourite</string>
+    <string name="add_bottom_bar">Add to Tour</string>
     <string name="search_bottom_bar">Search</string>
     <string name="tours_bottom_bar">Tours</string>
     <string name="history_bottom_bar">History</string>
     <string name="settings_button">Settings</string>
     <string name="sights_textview">Sights</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="title_activity_maps">Map</string>
 </resources>

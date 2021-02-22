@@ -10,4 +10,6 @@
     <string name="settings_button">Ρυθμίσεις</string>
     <string name="sights_textview">Αξιοθέατα</string>
     <string name="home_bottom_bar">Αρχική</string>
+    <string name="heart_bottom_bar">Προσθέστε στα Αγαπημένα</string>
+    <string name="add_bottom_bar">Προσθέστε σε Εκδρομή</string>
 </resources>

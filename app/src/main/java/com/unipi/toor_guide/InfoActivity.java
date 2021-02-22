@@ -3,16 +3,54 @@ package com.unipi.toor_guide;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.ContextMenu;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,27 +65,67 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoActivity extends AppCompatActivity {
+public class InfoActivity extends AppCompatActivity   {
 
-    TextView textView,description;
+    TextView textView,description,what2see;
     private StorageReference storageRef;
     private FirebaseRemoteConfig remoteConfig;
-    private ViewPager2 viewPager2;
+    private FirebaseDatabase firedb;
+    private DatabaseReference ref;
+    private Sight s;
+
+
+    ImageView info_img;
+    ListView sightList;
+
+    private boolean isFavourite,hasSights ;
+    private List<String> sight_names = new ArrayList<>();
+    private List<String> sight_info_en = new ArrayList<>();
+    private List<String> sight_info_gr = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        viewPager2 = findViewById(R.id.viewpager);
-        List<Bitmap> images = new ArrayList<>();
+        hasSights = getIntent().getBooleanExtra("village",false);
+        sightList = findViewById(R.id.listView);
+
+        firedb = FirebaseDatabase.getInstance();
+        ref = firedb.getReference();
+
+        info_img = findViewById(R.id.info_img);
+        info_img.setBackgroundResource(R.drawable.rectangled);
+        isFavourite = false; //should get from user info
+
         textView = findViewById(R.id.id);
         description = findViewById(R.id.description);
+        what2see = findViewById(R.id.what2see);
+
+
+
+        String en_desc = getIntent().getStringExtra("description").split("GR")[0];
+        String gr_desc = getIntent().getStringExtra("description").split("GR")[1];
+        if(en_desc.contains(".,") || en_desc.contains("{EN=")) {
+            en_desc= en_desc.replace("{EN=","");
+            en_desc=en_desc.replace(".,",".");
+        }
+        if(gr_desc.contains("GR=") || gr_desc.contains("}")){
+            gr_desc= gr_desc.replace("GR=","");
+            gr_desc = gr_desc.replace("}","");
+        }
         String name = getIntent().getStringExtra("id");
         String imgname = getIntent().getStringExtra("path");
 
         textView.setText(name);
-        description.setText(getIntent().getStringExtra("description"));
+        description.setText(en_desc);
+        if(hasSights) what2see.setText("What to see in "+name);
+
+        s = new Sight();
+        SightsAdapter adapter = new SightsAdapter(this, R.layout.listview_adapter,  s.getsights(ref,name));
+        sightList.setAdapter(adapter);
+
+
 
         storageRef = FirebaseStorage.getInstance().getReference();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //night mode ui is not supported
@@ -57,23 +135,34 @@ public class InfoActivity extends AppCompatActivity {
         remoteConfig.fetch(3).addOnCompleteListener(task -> remoteConfig.fetchAndActivate());
 
 
-
         try{
             File localfile = File.createTempFile("tmp","jpg") ;
-
-            StorageReference imgref = storageRef.child("img/"+ imgname +"/");
-            for(int i=0; i<3; i++){
-                Log.i("image",(new StringBuilder().append(imgname).append(i+1)).toString());
-                StorageReference img = imgref.child((new StringBuilder().append(imgname).append(i+1).append(".jpg")).toString());
-                img.getFile(localfile).addOnSuccessListener(taskSnapshot -> {
-                    images.add(BitmapFactory.decodeFile(localfile.getAbsolutePath()));
-
-                });
-            }
-            viewPager2.setAdapter(new ImageAdapter(images,viewPager2));
+            StorageReference imgref = storageRef.child("img/"+ imgname);
+            imgref.getFile(localfile).addOnSuccessListener(taskSnapshot -> info_img.setImageBitmap(BitmapFactory.decodeFile(localfile.getAbsolutePath())));
         }catch (IOException e){
             e.printStackTrace();
         }
     }
+
+
+    public boolean un_favourite(){
+        if(isFavourite) isFavourite=false; //unfavourite
+        else isFavourite=true; //favourite
+        return isFavourite;
+    }
+
+    public void favourite(View view){
+        ImageButton fav = findViewById(R.id.favButton);
+        un_favourite();
+        if(isFavourite){
+            fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_24));
+        }else
+            fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_border_24));
+    }
+
+    public void add2tour(View view){
+        startActivity(new Intent(this,CreateTourActivity.class));
+    }
+
 
 }
