@@ -11,7 +11,11 @@
     <string name="history_bottom_bar">History</string>
     <string name="settings_button">Settings</string>
     <string name="sights_textview">Sights</string>
+    <string name="beaches_textview">Beaches</string>
+    <string name="villages_textview">Villages</string>
     <!-- TODO: Remove or change this placeholder text -->
 
     <string name="title_activity_maps">Map</string>
+    <string name="waiting_message">We are still searching...\\nPlease wait</string>
+    <string name="what2see">"What to see in "</string>
 </resources>

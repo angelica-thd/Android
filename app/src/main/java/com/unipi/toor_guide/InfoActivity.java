@@ -95,7 +95,7 @@ public class InfoActivity extends AppCompatActivity   {
         ref = firedb.getReference();
 
         info_img = findViewById(R.id.info_img);
-        info_img.setBackgroundResource(R.drawable.rectangled);
+        //info_img.setBackgroundResource(R.drawable.rectangled);
         isFavourite = false; //should get from user info
 
         textView = findViewById(R.id.id);
@@ -119,7 +119,7 @@ public class InfoActivity extends AppCompatActivity   {
 
         textView.setText(name);
         description.setText(en_desc);
-        if(hasSights) what2see.setText("What to see in "+name);
+        if(hasSights) what2see.setText(getString(R.string.what2see)+name);
 
         s = new Sight();
         SightsAdapter adapter = new SightsAdapter(this, R.layout.listview_adapter,  s.getsights(ref,name));
