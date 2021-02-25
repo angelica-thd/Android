@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -17,6 +18,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -51,6 +56,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -65,7 +71,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoActivity extends AppCompatActivity   {
+public class InfoActivity extends AppCompatActivity implements SensorEventListener {
 
     TextView textView,description,what2see;
     private StorageReference storageRef;
@@ -74,6 +80,10 @@ public class InfoActivity extends AppCompatActivity   {
     private DatabaseReference ref;
     private Sight s;
 
+    private SensorManager mSensorManager;
+    private Sensor mTemperatureSensor;
+    private boolean isTemperatureSensorPresent;
+    private boolean flag=false;
 
     ImageView info_img;
     ListView sightList;
@@ -102,7 +112,8 @@ public class InfoActivity extends AppCompatActivity   {
         description = findViewById(R.id.description);
         what2see = findViewById(R.id.what2see);
 
-
+        mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        mTemperatureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 
         String en_desc = getIntent().getStringExtra("description").split("GR")[0];
         String gr_desc = getIntent().getStringExtra("description").split("GR")[1];
@@ -142,6 +153,11 @@ public class InfoActivity extends AppCompatActivity   {
         }catch (IOException e){
             e.printStackTrace();
         }
+
+        if(mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) != null) {
+            mTemperatureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+            isTemperatureSensorPresent = true;
+        }
     }
 
 
@@ -164,5 +180,37 @@ public class InfoActivity extends AppCompatActivity   {
         startActivity(new Intent(this,CreateTourActivity.class));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        if(isTemperatureSensorPresent) {
+            mSensorManager.registerListener(this, mTemperatureSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(isTemperatureSensorPresent) {
+            mSensorManager.unregisterListener(this);
+        }
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if(!hasSights && event.values[0]<20 && !flag){
+            //Toast.makeText(this,getString(R.string.toocold),Toast.LENGTH_LONG).show();
+            flag=true;
+            Snackbar.make(findViewById(R.id.constraintLayout),getString(R.string.toocold), Snackbar.LENGTH_LONG).show();
+        }else if(event.values[0]>20 && flag){
+            flag=false;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 }

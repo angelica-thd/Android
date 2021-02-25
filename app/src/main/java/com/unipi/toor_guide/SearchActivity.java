@@ -45,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -52,7 +53,6 @@ public class SearchActivity extends AppCompatActivity {
     BottomNavigationView bottomBar;
     EditText search_text;
     Button search_button;
-    Boolean flag=false;
 
     Context searchactivity = this;
     private StorageReference storageRef;
@@ -80,6 +80,9 @@ public class SearchActivity extends AppCompatActivity {
     ImageView cardimage;
     TextView cardtext;
 
+    TextView no_beaches;
+    TextView no_villages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,13 +106,9 @@ public class SearchActivity extends AppCompatActivity {
 
         beach_textview=findViewById(R.id.beach_textview);
         village_textview=findViewById(R.id.villages_textview);
-        beach_textview.setVisibility(View.INVISIBLE);
-        village_textview.setVisibility(View.INVISIBLE);
 
         beaches_hsv=findViewById(R.id.beaches_hsv);
         villages_hsv=findViewById(R.id.villages_hsv);
-        beaches_hsv.setVisibility(View.INVISIBLE);
-        villages_hsv.setVisibility(View.INVISIBLE);
 
         beaches_cardholder=findViewById(R.id.beaches_cardholder);
         villages_cardholder=findViewById(R.id.villages_cardholder);
@@ -138,21 +137,35 @@ public class SearchActivity extends AppCompatActivity {
         ref = firedb.getReference();
 
         myTts = new MyTts(searchactivity);
+
+        no_beaches=findViewById(R.id.no_beach_textview);
+        no_villages=findViewById(R.id.no_villages_textview);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         bottomBar.getMenu().getItem(1).setChecked(true);
+        beach_names.clear();
+        beaches_desc.clear();
+        villages_names.clear();
+        villages_desc.clear();
+        beaches_cardholder.removeAllViews();
+        villages_cardholder.removeAllViews();
+        beach_textview.setVisibility(View.INVISIBLE);
+        village_textview.setVisibility(View.INVISIBLE);
+        beaches_hsv.setVisibility(View.INVISIBLE);
+        villages_hsv.setVisibility(View.INVISIBLE);
     }
 
     public void search(View view){
-        if(!flag){
-            flag=true;
-            search_fun();
-        }else{
-            Toast.makeText(searchactivity,getString(R.string.waiting_message),LENGTH_LONG).show();
+        if(beach_textview.getVisibility()==View.INVISIBLE){
+            beach_textview.setVisibility(View.VISIBLE);
+            village_textview.setVisibility(View.VISIBLE);
+            beaches_hsv.setVisibility(View.VISIBLE);
+            villages_hsv.setVisibility(View.VISIBLE);
         }
+        search_fun();
     }
 
     private void search_fun(){
@@ -168,35 +181,36 @@ public class SearchActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot snap: snapshot.getChildren()){
                         for(DataSnapshot  sight : snap.child("Beaches").getChildren()){
-                            String beach = String.valueOf(sight.getKey());
-                            if(beach.startsWith(search_text.getText().toString())&&!beach_names.contains(beach)) {
-                                beach_names.add(beach);
+                            String beachen = String.valueOf(sight.getKey());
+                            String beachel=String.valueOf(sight.child("NameTrans").getValue());
+                            Log.i("Beach el",beachel);
+                            if((beachen.startsWith(search_text.getText().toString())||beachel.startsWith(search_text.getText().toString()))&&!beach_names.contains(beachen)) {
+                                beach_names.add(beachen);
                                 beaches_desc.add(String.valueOf(sight.child("Info").getValue()));
                             }
                         }
                         for (DataSnapshot sight : snap.child("Villages").getChildren()) {
-                            String village = String.valueOf(sight.getKey());
-                            if(village.startsWith(search_text.getText().toString())&&!villages_names.contains(village)) {
-                                villages_names.add(village);
+                            String villagen = String.valueOf(sight.getKey());
+                            String villagel=String.valueOf(sight.child("NameTrans").getValue());
+                            if((villagen.startsWith(search_text.getText().toString())||villagel.startsWith(search_text.getText().toString()))&&!villages_names.contains(villagen)) {
+                                villages_names.add(villagen);
                                 villages_desc.add(String.valueOf(sight.child("Info").getValue()));
                             }
                         }
                     }
 
                     if(beach_names.isEmpty()){
-                        beach_textview.setVisibility(View.INVISIBLE);
-                        beaches_hsv.setVisibility(View.INVISIBLE);
+                        no_beaches.setVisibility(View.VISIBLE);
+                        no_beaches.setText(getText(R.string.no_beach)+search_text.getText().toString());
                     }else {
-                        beach_textview.setVisibility(View.VISIBLE);
-                        beaches_hsv.setVisibility(View.VISIBLE);
+                        no_beaches.setVisibility(View.INVISIBLE);
                     }
 
                     if(villages_names.isEmpty()){
-                        village_textview.setVisibility(View.INVISIBLE);
-                        villages_hsv.setVisibility(View.INVISIBLE);
+                        no_villages.setVisibility(View.VISIBLE);
+                        no_villages.setText(getText(R.string.no_villages)+search_text.getText().toString());
                     }else{
-                        village_textview.setVisibility(View.VISIBLE);
-                        villages_hsv.setVisibility(View.VISIBLE);
+                        no_villages.setVisibility(View.INVISIBLE);
                     }
 
                     for(int i=0; i<beach_names.size(); i++){
@@ -250,7 +264,6 @@ public class SearchActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
-                    flag=false;
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {

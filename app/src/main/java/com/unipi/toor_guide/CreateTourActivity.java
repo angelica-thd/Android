@@ -36,4 +36,10 @@ public class CreateTourActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(0,0);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bottomBar.getMenu().getItem(2).setChecked(true);
+    }
 }

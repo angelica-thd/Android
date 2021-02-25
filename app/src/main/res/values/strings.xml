@@ -16,6 +16,9 @@
     <!-- TODO: Remove or change this placeholder text -->
 
     <string name="title_activity_maps">Map</string>
-    <string name="waiting_message">We are still searching...\\nPlease wait</string>
+    <string name="waiting_message">We are still searching... Please wait</string>
     <string name="what2see">"What to see in "</string>
+    <string name="toocold">It\'s too cold to go for swimming</string>
+    <string name="no_beach">There are no beaches starting with</string>
+    <string name="no_villages">There are no villages starting with</string>
 </resources>

@@ -15,6 +15,9 @@
     <string name="beaches_textview">Παραλίες</string>
     <string name="villages_textview">Χωριά</string>
     <string name="title_activity_maps">Χάρτης</string>
-    <string name="waiting_message">Ακόμα αναζητάμε...\\nΠαρακαλούμε περιμένετε</string>
+    <string name="waiting_message">Ακόμα αναζητάμε... Παρακαλούμε περιμένετε</string>
     <string name="what2see">"Τι υπάρχει να δείτε στο/η "</string>
+    <string name="toocold">Κάνει πολύ κρύο για να πας για κολύμπι</string>
+    <string name="no_beach">"Δεν υπάρχουν παραλίες που ξεκινάνε με "</string>
+    <string name="no_villages">"Δεν υπάρχουν χωριά που να ξεκινάνε με "</string>
 </resources>

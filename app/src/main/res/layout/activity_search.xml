@@ -15,6 +15,7 @@
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
         android:scrollbars="none"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +37,7 @@
         android:layout_height="200dp"
         android:layout_marginTop="16dp"
         android:scrollbars="none"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,14 +56,15 @@
 
     <TextView
         android:id="@+id/villages_textview"
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:autoSizeTextType="uniform"
         android:text="@string/villages_textview"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.058"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,14 +72,15 @@
 
     <TextView
         android:id="@+id/beach_textview"
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:autoSizeTextType="uniform"
         android:text="@string/beaches_textview"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.059"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,6 +141,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/search_edittext"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/no_beach_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeTextType="uniform"
+        android:text="@string/no_beach"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/beaches_hsv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/beaches_hsv" />
+
+    <TextView
+        android:id="@+id/no_villages_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeTextType="uniform"
+        android:text="@string/no_villages"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/villages_hsv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/villages_hsv"
+        app:layout_constraintTop_toTopOf="@+id/villages_hsv" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
