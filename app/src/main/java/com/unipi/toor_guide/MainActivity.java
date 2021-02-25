@@ -178,10 +178,10 @@ public class MainActivity extends AppCompatActivity {
         cardimage=new ImageView(context);
         cardimage.setImageBitmap(background);
         cardimage.setScaleType(ImageView.ScaleType.FIT_XY);
-        cardimage.setMaxHeight(2147483647);
-        cardimage.setMinimumHeight(2147483647);
-        cardimage.setMaxWidth(2147483647);
-        cardimage.setMinimumHeight(2147483647);
+        cardimage.setMaxHeight(Integer.MAX_VALUE);
+        cardimage.setMinimumHeight(Integer.MAX_VALUE);
+        cardimage.setMaxWidth(Integer.MAX_VALUE);
+        cardimage.setMinimumHeight(Integer.MAX_VALUE);
         cardview.addView(cardimage);
 
         cardtext = new TextView(context);

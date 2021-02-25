@@ -156,6 +156,8 @@ public class SearchActivity extends AppCompatActivity {
         village_textview.setVisibility(View.INVISIBLE);
         beaches_hsv.setVisibility(View.INVISIBLE);
         villages_hsv.setVisibility(View.INVISIBLE);
+        no_beaches.setVisibility(View.INVISIBLE);
+        no_villages.setVisibility(View.INVISIBLE);
     }
 
     public void search(View view){
@@ -184,7 +186,7 @@ public class SearchActivity extends AppCompatActivity {
                             String beachen = String.valueOf(sight.getKey());
                             String beachel=String.valueOf(sight.child("NameTrans").getValue());
                             Log.i("Beach el",beachel);
-                            if((beachen.startsWith(search_text.getText().toString())||beachel.startsWith(search_text.getText().toString()))&&!beach_names.contains(beachen)) {
+                            if((beachen.contains(search_text.getText().toString())||beachel.contains(search_text.getText().toString()))&&!beach_names.contains(beachen)) {
                                 beach_names.add(beachen);
                                 beaches_desc.add(String.valueOf(sight.child("Info").getValue()));
                             }
@@ -192,7 +194,7 @@ public class SearchActivity extends AppCompatActivity {
                         for (DataSnapshot sight : snap.child("Villages").getChildren()) {
                             String villagen = String.valueOf(sight.getKey());
                             String villagel=String.valueOf(sight.child("NameTrans").getValue());
-                            if((villagen.startsWith(search_text.getText().toString())||villagel.startsWith(search_text.getText().toString()))&&!villages_names.contains(villagen)) {
+                            if((villagen.contains(search_text.getText().toString())||villagel.contains(search_text.getText().toString()))&&!villages_names.contains(villagen)) {
                                 villages_names.add(villagen);
                                 villages_desc.add(String.valueOf(sight.child("Info").getValue()));
                             }

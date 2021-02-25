@@ -200,11 +200,12 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(!hasSights && event.values[0]<20 && !flag){
+        if(!hasSights && event.values[0]<20 && !flag) {
             //Toast.makeText(this,getString(R.string.toocold),Toast.LENGTH_LONG).show();
-            flag=true;
-            Snackbar.make(findViewById(R.id.constraintLayout),getString(R.string.toocold), Snackbar.LENGTH_LONG).show();
-        }else if(event.values[0]>20 && flag){
+            flag = true;
+            Snackbar.make(findViewById(R.id.constraintLayout), getString(R.string.toocold), Snackbar.LENGTH_LONG).show();
+        }
+        if(event.values[0]>20 && flag){
             flag=false;
         }
     }
