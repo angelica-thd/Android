@@ -75,8 +75,8 @@
                     android:layout_height="60dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_toStartOf="@+id/add2tourButton"
+                    android:layout_marginBottom="-2dp"
+                    android:layout_toStartOf="@+id/find"
                     android:background="#00FFFFFF"
                     android:onClick="favourite"
                     android:src="@drawable/ic_baseline_favorite_24"
@@ -84,6 +84,24 @@
                     app:layout_constraintBottom_toBottomOf="@+id/info_img"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+                <ImageButton
+                    android:id="@+id/find"
+                    android:layout_width="70dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toStartOf="@+id/add2tourButton"
+                    android:background="#00FFFFFF"
+                    android:onClick="find"
+                    android:src="@drawable/ic_baseline_not_listed_location_24
+"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/info_img"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:tint="@color/white"
+                    tools:srcCompat="@drawable/ic_baseline_not_listed_location_24" />
 
             </RelativeLayout>
 

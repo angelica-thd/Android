@@ -1,7 +1,9 @@
 package com.unipi.toor_guide;
 
+import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
@@ -64,6 +66,7 @@ public class Sight {
         });
         return sights;
     }
+
 
     public void setName(String name) {
         this.name = name;

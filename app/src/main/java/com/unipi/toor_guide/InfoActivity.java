@@ -74,6 +74,7 @@ import java.util.List;
 public class InfoActivity extends AppCompatActivity implements SensorEventListener {
 
     TextView textView,description,what2see;
+    ImageButton find;
     private StorageReference storageRef;
     private FirebaseRemoteConfig remoteConfig;
     private FirebaseDatabase firedb;
@@ -92,6 +93,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
     private List<String> sight_names = new ArrayList<>();
     private List<String> sight_info_en = new ArrayList<>();
     private List<String> sight_info_gr = new ArrayList<>();
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
 
         hasSights = getIntent().getBooleanExtra("village",false);
         sightList = findViewById(R.id.listView);
+        find = findViewById(R.id.find);
 
         firedb = FirebaseDatabase.getInstance();
         ref = firedb.getReference();
@@ -111,6 +114,8 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         textView = findViewById(R.id.id);
         description = findViewById(R.id.description);
         what2see = findViewById(R.id.what2see);
+        if(!hasSights) what2see.setVisibility(View.INVISIBLE);
+        else what2see.setVisibility(View.VISIBLE);
 
         mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         mTemperatureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
@@ -125,16 +130,21 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
             gr_desc= gr_desc.replace("GR=","");
             gr_desc = gr_desc.replace("}","");
         }
-        String name = getIntent().getStringExtra("id");
+        name = getIntent().getStringExtra("id");
         String imgname = getIntent().getStringExtra("path");
 
+        if(name.contains(" ")) name = name.replace(" ","\n");
         textView.setText(name);
         description.setText(en_desc);
-        if(hasSights) what2see.setText(getString(R.string.what2see)+name);
+
 
         s = new Sight();
         SightsAdapter adapter = new SightsAdapter(this, R.layout.listview_adapter,  s.getsights(ref,name));
         sightList.setAdapter(adapter);
+        if(adapter!=null){
+            what2see.setText(getString(R.string.what2see)+name);
+            find.setVisibility(View.INVISIBLE);
+        }
 
 
 
@@ -180,6 +190,61 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         startActivity(new Intent(this,CreateTourActivity.class));
     }
 
+    public void find(View view){
+
+        if(name.contains("\n")) name = name.replace("\n"," ");
+        ref.addValueEventListener(new ValueEventListener() {
+            Sight sight = null;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snap: snapshot.getChildren()){
+                    for(DataSnapshot  s : snap.child("Beaches").getChildren()){
+                        String beach = String.valueOf(s.getKey());
+                        Log.i("sight/beachname",beach);
+                        if(beach.equals(name)){
+                            String x = String.valueOf(s.child("Location").child("X").getValue());
+                            String y = String.valueOf(s.child("Location").child("Y").getValue());
+                            LatLng loc =new LatLng(Double.parseDouble(x),Double.parseDouble(y));
+                            sight = new Sight(name,String.valueOf(s.child("Info").child("EN").getValue()),
+                                    String.valueOf(s.child("Info").child("GR").getValue()),
+                                    loc,null);
+                            startActivity(new Intent(InfoActivity.this,MapsActivity.class).
+                                    putExtra("name",name).
+                                    putExtra("loc",loc));
+                            Log.i("sight", String.valueOf(sight));
+
+                            break;
+                        }
+                    }
+                    if(sight!=null) break;
+                    for (DataSnapshot s: snap.child("Villages").getChildren()) {
+                        String village = String.valueOf(s.getKey());
+                        if(village.equals(name)) {
+                            if(s.child("Location").exists()){
+                                String x = String.valueOf(s.child("Location").child("X").getValue());
+                                String y = String.valueOf(s.child("Location").child("Y").getValue());
+                                LatLng loc =new LatLng(Double.parseDouble(x),Double.parseDouble(y));
+                                sight = new Sight(name,String.valueOf(s.child("Info").child("EN").getValue()),
+                                        String.valueOf(s.child("Info").child("GR").getValue()),
+                                        loc,null);
+                                startActivity(new Intent(InfoActivity.this,MapsActivity.class).
+                                        putExtra("name",name).
+                                        putExtra("loc",loc));
+                                break;
+                            }
+                        }
+                    }
+                    if(sight!=null) break;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i("fire_error",error.getMessage());
+            }
+        });
+    }
     @Override
     protected void onResume() {
         super.onResume();

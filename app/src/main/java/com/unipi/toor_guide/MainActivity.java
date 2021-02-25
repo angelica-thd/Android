@@ -109,20 +109,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int count = 0;
-                boolean vill = false;
+                boolean hasSights = false;
                 Log.i("datasnapshot","cool");
                 for (DataSnapshot snap: snapshot.getChildren()){
                     for(DataSnapshot  sight : snap.child("Beaches").getChildren()){
                         String beach = String.valueOf(sight.getKey());
                         if(!names.contains(beach))  names.add(beach);
                         desc.add(String.valueOf(sight.child("Info").getValue()));
-                        vill = false;
+                        hasSights = false;
                     }
                     for (DataSnapshot sight : snap.child("Villages").getChildren()) {
                         String village = String.valueOf(sight.getKey());
                         if(!names.contains(village))  names.add(village);
                         desc.add(String.valueOf(sight.child("Info").getValue()));
-                        vill = true;
+                        hasSights = true;
                     }
                     Log.i("storage",String.valueOf(names));
                 }
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                         StorageReference imgref = storageRef.child("img/"+ imgname);
                         int finalI = i;
                         String finalImgname = imgname;
-                        boolean finalVill = vill;
+                        boolean finalVill = hasSights;
                         imgref.getFile(localfile).addOnSuccessListener(taskSnapshot ->cards(mainactivity,
                                 BitmapFactory.decodeFile(localfile.getAbsolutePath()),
                                 names.get(finalI),
@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
         cardview.addView(cardimage);
 
         cardtext = new TextView(context);
-        if(name.contains(" ")) name = name.replace(" ","\n");
         cardtext.setText(name);
         cardtext.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         cardtext.setTextColor(Color.WHITE);
