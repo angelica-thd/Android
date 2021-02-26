@@ -72,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
         remoteConfig.setDefaultsAsync(R.xml.config_settings);
         remoteConfig.fetch(3).addOnCompleteListener(task -> remoteConfig.fetchAndActivate());
 
-        FloatingActionButton fab = findViewById(R.id.settingsbutton);
-        fab.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), SettingsActivity.class)));
 
         firedb = FirebaseDatabase.getInstance();
         ref = firedb.getReference();
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
                 return true;
             }
-            if (item.getItemId() == R.id.Tours) {
+            if (item.getItemId() == R.id.Favourites) {
                 startActivity(new Intent(getApplicationContext(), CreateTourActivity.class));
                 overridePendingTransition(0, 0);
                 return true;

@@ -20,4 +20,6 @@
     <string name="toocold">Κάνει πολύ κρύο για να πας για κολύμπι</string>
     <string name="no_beach">"Δεν υπάρχουν παραλίες που ξεκινάνε με "</string>
     <string name="no_villages">"Δεν υπάρχουν χωριά που να ξεκινάνε με "</string>
+    <string name="map_not_ready">Ο χάρτης ακόμα φορτώνει, παρακαλώ περιμένετε.</string>
+    <string name="favs_bottom_bar">Αγαπημένα</string>
 </resources>

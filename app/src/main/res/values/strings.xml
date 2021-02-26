@@ -7,7 +7,7 @@
     <string name="heart_bottom_bar">Favourite</string>
     <string name="add_bottom_bar">Add to Tour</string>
     <string name="search_bottom_bar">Search</string>
-    <string name="tours_bottom_bar">Tours</string>
+    <string name="favs_bottom_bar">Favourites</string>
     <string name="history_bottom_bar">History</string>
     <string name="settings_button">Settings</string>
     <string name="sights_textview">Sights</string>
@@ -16,6 +16,7 @@
     <!-- TODO: Remove or change this placeholder text -->
 
     <string name="title_activity_maps">Map</string>
+    <string name="map_not_ready">The map has not loaded yet, plase, wait.</string>
     <string name="waiting_message">We are still searching... Please wait</string>
     <string name="what2see">"What to see in "</string>
     <string name="toocold">It\'s too cold to go for swimming</string>

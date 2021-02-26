@@ -5,21 +5,35 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +44,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private LatLng loc, current_loc;
     private String name;
+    private LocationManager locationManager;
     TextView text_name, coord;
+    FloatingActionButton fabloc_user,fabloc_point;
+    private static final int  reqCode = 786;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +59,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); //location services initialization
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, reqCode);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, reqCode);
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+
         text_name = findViewById(R.id.name);
         coord = findViewById(R.id.coord);
+
 
         name = getIntent().getStringExtra("name");
         Bundle b = getIntent().getExtras();
         loc = (LatLng) b.get("loc");
         text_name.setText(name);
+
+        fabloc_user = findViewById(R.id.floating_user_location);
+        fabloc_point = findViewById(R.id.floating_point_location);
+
+        fabloc_user.setOnClickListener(view -> {
+            Log.i("loc",String.valueOf(current_loc));
+            if(current_loc!=null){
+                MarkerOptions my_options = new MarkerOptions().position(current_loc).title("You are here.");
+                my_options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                mMap.addMarker(my_options);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current_loc,15));
+            } else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
+
+        });
+
+        fabloc_point.setOnClickListener(view -> {
+             if(loc!=null){
+                mMap.addMarker(new MarkerOptions().position(loc).title(name+" is here."));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc,15));
+            }
+             else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
+
+        });
 
         StringBuilder gps_address = new StringBuilder();
         try {
@@ -57,15 +107,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (addresses.size() > 0) {
                 Address address = addresses.get(0);
                 gps_address.append(address.getAddressLine(0));
-                String[] gps = gps_address.toString().split(",");
-
-                // we only need the road, number and city of the address
                 coord.setText(gps_address.toString());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -80,27 +126,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-
-        mMap.addMarker(new MarkerOptions().position(loc).title(name+" is here."));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 15));
-        /*
-        if (current_loc!=null){
-            MarkerOptions my_options = new MarkerOptions().position(current_loc).title("You are here.");
-            my_options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-            mMap.addMarker(my_options);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current_loc,5));
-        }
-*/
+        if (loc != null) {
+           fabloc_point.performClick();
+       }else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
     }
+
+
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
         if (location!=null){
+            Log.i("loc",String.valueOf(location));
             current_loc = new LatLng(location.getLatitude(),location.getLongitude());
-        }
 
+        }
     }
 
     @Override

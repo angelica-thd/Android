@@ -27,7 +27,7 @@ public class CreateTourActivity extends AppCompatActivity {
                 overridePendingTransition(0,0);
                 return true;
             }
-            return item.getItemId() == R.id.Tours;
+            return item.getItemId() == R.id.Favourites;
         });
     }
 

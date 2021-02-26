@@ -11,7 +11,7 @@
         android:title="@string/search_bottom_bar" />
 
     <item
-        android:id="@+id/Tours"
-        android:icon="@drawable/ic_baseline_tour_24"
-        android:title="@string/tours_bottom_bar" />
+        android:id="@+id/Favourites"
+        android:icon="@drawable/ic_baseline_favorite_24"
+        android:title="@string/favs_bottom_bar" />
 </menu>

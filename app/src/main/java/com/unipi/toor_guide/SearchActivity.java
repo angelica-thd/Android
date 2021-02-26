@@ -96,7 +96,7 @@ public class SearchActivity extends AppCompatActivity {
                 overridePendingTransition(0,0);
                 return true;
             }
-            if(item.getItemId()==R.id.Tours){
+            if(item.getItemId()==R.id.Favourites){
                 startActivity(new Intent(getApplicationContext(),CreateTourActivity.class));
                 overridePendingTransition(0,0);
                 return true;

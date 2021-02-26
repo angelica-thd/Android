@@ -15,6 +15,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -74,7 +76,7 @@ import java.util.List;
 public class InfoActivity extends AppCompatActivity implements SensorEventListener {
 
     TextView textView,description,what2see;
-    ImageButton find;
+    ImageButton find,fav;
     private StorageReference storageRef;
     private FirebaseRemoteConfig remoteConfig;
     private FirebaseDatabase firedb;
@@ -94,6 +96,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
     private List<String> sight_info_en = new ArrayList<>();
     private List<String> sight_info_gr = new ArrayList<>();
     private String name;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,19 +106,29 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         hasSights = getIntent().getBooleanExtra("village",false);
         sightList = findViewById(R.id.listView);
         find = findViewById(R.id.find);
-
+        fav = findViewById(R.id.favButton);
         firedb = FirebaseDatabase.getInstance();
         ref = firedb.getReference();
 
+        //SQLite database initialization
+        db = openOrCreateDatabase("FavouriteSights", Context.MODE_PRIVATE,null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS favs(name TEXT)");
+
         info_img = findViewById(R.id.info_img);
-        //info_img.setBackgroundResource(R.drawable.rectangled);
+
         isFavourite = false; //should get from user info
 
         textView = findViewById(R.id.id);
         description = findViewById(R.id.description);
         what2see = findViewById(R.id.what2see);
-        if(!hasSights) what2see.setVisibility(View.INVISIBLE);
-        else what2see.setVisibility(View.VISIBLE);
+        if(!hasSights){
+            what2see.setVisibility(View.INVISIBLE);
+            find.setVisibility(View.VISIBLE);
+        }
+        else{
+            what2see.setVisibility(View.VISIBLE);
+            find.setVisibility(View.INVISIBLE);
+        }
 
         mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         mTemperatureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
@@ -133,6 +146,17 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         name = getIntent().getStringExtra("id");
         String imgname = getIntent().getStringExtra("path");
 
+        Cursor cursor = db.rawQuery("select * from favs ", new String[]{});
+        if(cursor.getCount()>0) {
+            while (cursor.moveToNext())
+
+                if(name.contains(cursor.getString(0))){
+                    isFavourite = true;
+                    fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_24));
+                }
+        }
+
+
         if(name.contains(" ")) name = name.replace(" ","\n");
         textView.setText(name);
         description.setText(en_desc);
@@ -142,9 +166,11 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         SightsAdapter adapter = new SightsAdapter(this, R.layout.listview_adapter,  s.getsights(ref,name));
         sightList.setAdapter(adapter);
         if(adapter!=null){
-            what2see.setText(getString(R.string.what2see)+name);
+            what2see.setVisibility(View.VISIBLE);
             find.setVisibility(View.INVISIBLE);
-        }
+        }else
+            find.setVisibility(View.VISIBLE);
+
 
 
 
@@ -178,12 +204,23 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void favourite(View view){
-        ImageButton fav = findViewById(R.id.favButton);
+
         un_favourite();
         if(isFavourite){
+            if(name.contains("\n")) name = name.replace("\n"," ");
             fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_24));
-        }else
+
+            Cursor cursor = db.rawQuery("select * from favs ", new String[]{});
+            if(cursor.getCount()>0) {
+                while (cursor.moveToNext())
+                    if(!name.contains(cursor.getString(0))){
+                        db.execSQL("insert into favs values('"+name+"')");
+                    }
+            }
+        }else{
             fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_border_24));
+            db.execSQL("delete from favs where name ='"+name +"'");
+        }
     }
 
     public void add2tour(View view){
