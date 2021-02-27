@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -61,7 +62,9 @@ public class SearchActivity extends AppCompatActivity {
     private DatabaseReference ref;
 
     List<String> beach_names = new ArrayList<String>();
+    List<String> gr_beach_names = new ArrayList<String>();
     List<String> villages_names = new ArrayList<String>();
+    List<String> gr_villages_names = new ArrayList<String>();
 
     List<String>  beaches_desc = new ArrayList<>();
     List<String>  villages_desc = new ArrayList<>();
@@ -172,8 +175,10 @@ public class SearchActivity extends AppCompatActivity {
 
     private void search_fun(){
         beach_names.clear();
+        gr_beach_names.clear();
         beaches_desc.clear();
         villages_names.clear();
+        gr_villages_names.clear();
         villages_desc.clear();
         beaches_cardholder.removeAllViews();
         villages_cardholder.removeAllViews();
@@ -184,18 +189,20 @@ public class SearchActivity extends AppCompatActivity {
                     for (DataSnapshot snap: snapshot.getChildren()){
                         for(DataSnapshot  sight : snap.child("Beaches").getChildren()){
                             String beachen = String.valueOf(sight.getKey());
-                            String beachel=String.valueOf(sight.child("NameTrans").getValue());
+                            String beachel = String.valueOf(sight.child("NameTrans").getValue());
                             Log.i("Beach el",beachel);
-                            if((beachen.contains(search_text.getText().toString())||beachel.contains(search_text.getText().toString()))&&!beach_names.contains(beachen)) {
+                            if((beachen.toLowerCase().contains(search_text.getText().toString().toLowerCase())||beachel.toLowerCase().contains(search_text.getText().toString().toLowerCase()))&&!beach_names.contains(beachen)) {
                                 beach_names.add(beachen);
+                                gr_beach_names.add(beachel);
                                 beaches_desc.add(String.valueOf(sight.child("Info").getValue()));
                             }
                         }
                         for (DataSnapshot sight : snap.child("Villages").getChildren()) {
                             String villagen = String.valueOf(sight.getKey());
                             String villagel=String.valueOf(sight.child("NameTrans").getValue());
-                            if((villagen.contains(search_text.getText().toString())||villagel.contains(search_text.getText().toString()))&&!villages_names.contains(villagen)) {
+                            if((villagen.toLowerCase().contains(search_text.getText().toString().toLowerCase())||villagel.toLowerCase().contains(search_text.getText().toString().toLowerCase()))&&!villages_names.contains(villagen)) {
                                 villages_names.add(villagen);
+                                gr_villages_names.add(villagel);
                                 villages_desc.add(String.valueOf(sight.child("Info").getValue()));
                             }
                         }
@@ -234,7 +241,8 @@ public class SearchActivity extends AppCompatActivity {
                                     beaches_desc.get(finalI),
                                     finalImgname,
                                     false,
-                                    beaches_cardholder));
+                                    beaches_cardholder,
+                                    gr_beach_names.get(finalI)));
 
                         }catch (IOException e){
                             e.printStackTrace();
@@ -260,7 +268,8 @@ public class SearchActivity extends AppCompatActivity {
                                     villages_desc.get(finalI),
                                     finalImgname,
                                     true,
-                                    villages_cardholder));
+                                    villages_cardholder,
+                                    gr_villages_names.get(finalI)));
 
                         }catch (IOException e){
                             e.printStackTrace();
@@ -287,7 +296,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    public void cards(Context context, Bitmap background, String name, String description, String imgpath,boolean village,LinearLayout cardholder) {
+    public void cards(Context context, Bitmap background, String name, String description, String imgpath,boolean village,LinearLayout cardholder,String gr_name) {
         cardview = new CardView(context);
         cardview.setRadius(0);
         cardview.setPadding(0, 0, 0, 0);
@@ -305,7 +314,11 @@ public class SearchActivity extends AppCompatActivity {
 
         cardtext = new TextView(context);
         if (name.contains(" ")) name = name.replace(" ", "\n");
-        cardtext.setText(name);
+        String[] systemLangs = Resources.getSystem().getConfiguration().getLocales().toLanguageTags().split(",");
+
+        if (systemLangs[0].contains(Locale.forLanguageTag("EL").toLanguageTag())) cardtext.setText(gr_name);
+        else cardtext.setText(name);
+
         cardtext.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         cardtext.setTextColor(Color.WHITE);
         cardtext.setPadding(10, 430, 10, 0);
@@ -318,7 +331,8 @@ public class SearchActivity extends AppCompatActivity {
                     putExtra("id", finalName).
                     putExtra("description", description).
                     putExtra("path", imgpath).
-                    putExtra("village",village));
+                    putExtra("village",village).
+                    putExtra("gr_name",gr_name));
         });
 
         cardholder.addView(cardview, llayoutparams);

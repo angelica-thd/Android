@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -43,7 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private LatLng loc, current_loc;
-    private String name;
+    private String name,grname;
     private LocationManager locationManager;
     TextView text_name, coord;
     FloatingActionButton fabloc_user,fabloc_point;
@@ -53,6 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //night mode ui is not supported
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -73,9 +75,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         name = getIntent().getStringExtra("name");
+        grname = getIntent().getStringExtra("grname");
         Bundle b = getIntent().getExtras();
         loc = (LatLng) b.get("loc");
         text_name.setText(name);
+
+        String[] systemLangs = Resources.getSystem().getConfiguration().getLocales().toLanguageTags().split(",");
+
+        if (systemLangs[0].contains(Locale.forLanguageTag("EL").toLanguageTag())){
+            text_name.setText(grname);
+
+        }else{
+            text_name.setText(name);
+
+        }
 
         fabloc_user = findViewById(R.id.floating_user_location);
         fabloc_point = findViewById(R.id.floating_point_location);
@@ -90,19 +103,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
 
         });
-
+        fabloc_user.setOnLongClickListener(view -> {
+            Toast.makeText(this,
+                    R.string.user_loc,Toast.LENGTH_LONG).show();
+            return true;
+        });
         fabloc_point.setOnClickListener(view -> {
              if(loc!=null){
                 mMap.addMarker(new MarkerOptions().position(loc).title(name+" is here."));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc,15));
             }
              else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
-
+        });
+        fabloc_point.setOnLongClickListener(view -> {
+            Toast.makeText(this,
+                    R.string.point_loc,Toast.LENGTH_LONG).show();
+            return true;
         });
 
         StringBuilder gps_address = new StringBuilder();
         try {
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault()); //the sms needs the address of the user to be in greek
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
             if (addresses.size() > 0) {
                 Address address = addresses.get(0);
@@ -126,9 +147,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (loc != null) {
-           fabloc_point.performClick();
-       }else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
+        if (mMap==null){
+            Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
+        }else{
+
+            if (loc != null) {
+                fabloc_point.performClick();
+            } else Toast.makeText(this, R.string.map_not_ready, Toast.LENGTH_LONG).show();
+
+        }
     }
 
 

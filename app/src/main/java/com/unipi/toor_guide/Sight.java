@@ -18,6 +18,7 @@ import java.util.List;
 
 public class Sight {
     private String name;
+    private String gr_name;
     private String info_en;
     private String info_gr;
     private LatLng location;
@@ -26,8 +27,17 @@ public class Sight {
     public Sight() {
     }
 
-    public Sight(String name, String info_en, String info_gr, LatLng location, String village) {
+    public String getGr_name() {
+        return gr_name;
+    }
+
+    public void setGr_name(String gr_name) {
+        this.gr_name = gr_name;
+    }
+
+    public Sight(String name, String gr_name, String info_en, String info_gr, LatLng location, String village) {
         this.name = name;
+        this.gr_name = gr_name;
         this.info_en = info_en;
         this.info_gr = info_gr;
         this.location = location;
@@ -46,10 +56,12 @@ public class Sight {
                         if(name.equals(String.valueOf(village.getKey())))
                             if(village.child("Sights").exists())
                                 for (DataSnapshot sight : village.child("Sights").getChildren()){
+
                                     String x = String.valueOf(sight.child("Location").child("X").getValue());
                                     String y = String.valueOf(sight.child("Location").child("Y").getValue());
                                     LatLng loc =new LatLng(Double.parseDouble(x),Double.parseDouble(y));
                                      sights.add(new Sight(String.valueOf(sight.getKey()),
+                                            String.valueOf(sight.child("NameTrans").getValue()),
                                             String.valueOf(sight.child("Info").child("EN").getValue()),
                                             String.valueOf(sight.child("Info").child("GR").getValue()),
                                             loc,

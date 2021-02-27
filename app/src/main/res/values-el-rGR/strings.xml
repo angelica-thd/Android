@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Τουριστικός Οδηγός</string>
+    <string name="app_name">Οδηγός Λέσβου</string>
     <string name="island">Λέσβος</string>
     <string name="island_info">"Είναι ένα εύφορο νησί, κατάφυτο από πευκώνες και ελαιώνες, με έντονες εναλλαγές των τοπίων. "</string>
     <string name="tomain">Ας εξερευνήσουμε</string>
@@ -22,4 +22,6 @@
     <string name="no_villages">"Δεν υπάρχουν χωριά που να ξεκινάνε με "</string>
     <string name="map_not_ready">Ο χάρτης ακόμα φορτώνει, παρακαλώ περιμένετε.</string>
     <string name="favs_bottom_bar">Αγαπημένα</string>
+    <string name="user_loc">Βρείτε την τοποθεσία σας.</string>
+    <string name="point_loc">Βρείτε την τοποθε΄σία του προορισμού.</string>
 </resources>

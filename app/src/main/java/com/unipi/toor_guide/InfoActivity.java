@@ -15,6 +15,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -72,6 +73,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class InfoActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -142,9 +144,12 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         if(gr_desc.contains("GR=") || gr_desc.contains("}")){
             gr_desc= gr_desc.replace("GR=","");
             gr_desc = gr_desc.replace("}","");
+            gr_desc = gr_desc.replace("=","");
+            Log.i("grnmae",gr_desc);
         }
         name = getIntent().getStringExtra("id");
         String imgname = getIntent().getStringExtra("path");
+
 
         Cursor cursor = db.rawQuery("select * from favs ", new String[]{});
         if(cursor.getCount()>0) {
@@ -156,22 +161,29 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
                 }
         }
 
+        Log.i("lang", Resources.getSystem().getConfiguration().getLocales().toLanguageTags()+ Locale.forLanguageTag("EL").toLanguageTag());
+        String[] systemLangs = Resources.getSystem().getConfiguration().getLocales().toLanguageTags().split(",");
 
-        if(name.contains(" ")) name = name.replace(" ","\n");
-        textView.setText(name);
-        description.setText(en_desc);
+        if (systemLangs[0].contains(Locale.forLanguageTag("EL").toLanguageTag())){
+            description.setText(gr_desc);
+            String gr_name = getIntent().getStringExtra("gr_name");
+            if(gr_name.contains(" ")) {
+                gr_name = gr_name.replace(" ","\n");
+            }
+            textView.setText(gr_name);
+        }
+        else{
+            description.setText(en_desc);
+            if(name.contains(" ")) name = name.replace(" ","\n");
+            textView.setText(name);
+
+        }
+
 
 
         s = new Sight();
         SightsAdapter adapter = new SightsAdapter(this, R.layout.listview_adapter,  s.getsights(ref,name));
         sightList.setAdapter(adapter);
-        if(adapter!=null){
-            what2see.setVisibility(View.VISIBLE);
-            find.setVisibility(View.INVISIBLE);
-        }else
-            find.setVisibility(View.VISIBLE);
-
-
 
 
         storageRef = FirebaseStorage.getInstance().getReference();
@@ -204,7 +216,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void favourite(View view){
-
+        boolean exists = false;
         un_favourite();
         if(isFavourite){
             if(name.contains("\n")) name = name.replace("\n"," ");
@@ -213,10 +225,11 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
             Cursor cursor = db.rawQuery("select * from favs ", new String[]{});
             if(cursor.getCount()>0) {
                 while (cursor.moveToNext())
-                    if(!name.contains(cursor.getString(0))){
-                        db.execSQL("insert into favs values('"+name+"')");
-                    }
+                    if(!cursor.getString(0).equals(name)){
+                        exists = false;
+                    }else exists = true;
             }
+            if (!exists) db.execSQL("insert into favs values('"+name+"')");
         }else{
             fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_border_24));
             db.execSQL("delete from favs where name ='"+name +"'");
@@ -243,6 +256,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
                             String y = String.valueOf(s.child("Location").child("Y").getValue());
                             LatLng loc =new LatLng(Double.parseDouble(x),Double.parseDouble(y));
                             sight = new Sight(name,String.valueOf(s.child("Info").child("EN").getValue()),
+                                    String.valueOf(s.child("NameTrans").getValue()),
                                     String.valueOf(s.child("Info").child("GR").getValue()),
                                     loc,null);
                             startActivity(new Intent(InfoActivity.this,MapsActivity.class).
@@ -262,6 +276,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
                                 String y = String.valueOf(s.child("Location").child("Y").getValue());
                                 LatLng loc =new LatLng(Double.parseDouble(x),Double.parseDouble(y));
                                 sight = new Sight(name,String.valueOf(s.child("Info").child("EN").getValue()),
+                                        String.valueOf(s.child("NameTrans").getValue()),
                                         String.valueOf(s.child("Info").child("GR").getValue()),
                                         loc,null);
                                 startActivity(new Intent(InfoActivity.this,MapsActivity.class).

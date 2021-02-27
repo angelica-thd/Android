@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -16,6 +18,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -38,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,8 +57,16 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout cardholder;
     CardView cardview;
     LinearLayout.LayoutParams llayoutparams;
+    TextView beach_textview;
+    TextView village_textview;
+    HorizontalScrollView beaches_hsv;
+    HorizontalScrollView villages_hsv;
+    LinearLayout beaches_cardholder;
+    LinearLayout villages_cardholder;
+
     ImageView cardimage;
     TextView cardtext;
+
     ProgressBar progressBar;
 
 
@@ -93,79 +105,136 @@ public class MainActivity extends AppCompatActivity {
             return item.getItemId() == R.id.home;
         });
 
-        cardholder=findViewById(R.id.cardholder);
+        beach_textview=findViewById(R.id.beach_textview1);
+        village_textview=findViewById(R.id.villages_textview1);
+
+        beaches_hsv=findViewById(R.id.beaches_hsv1);
+        villages_hsv=findViewById(R.id.villages_hsv1);
+
+        beaches_cardholder=findViewById(R.id.beaches_cardholder1);
+        villages_cardholder=findViewById(R.id.villages_cardholder1);
+
         llayoutparams = new LinearLayout.LayoutParams(
                 300,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
         llayoutparams.setMargins(20,0,20,0);
 
-        List<String> names = new ArrayList<String>();
-        List<String> desc = new ArrayList<>();
+
+
+        List<String> beach_names = new ArrayList<String>();
+        List<String> gr_beach_names = new ArrayList<String>();
+        List<String> villages_names = new ArrayList<String>();
+        List<String> gr_villages_names = new ArrayList<String>();
+
+        List<String>  beaches_desc = new ArrayList<>();
+        List<String>  villages_desc = new ArrayList<>();
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int count = 0;
                 boolean hasSights = false;
+
                 Log.i("datasnapshot","cool");
-                for (DataSnapshot snap: snapshot.getChildren()){
-                    for(DataSnapshot  sight : snap.child("Beaches").getChildren()){
-                        String beach = String.valueOf(sight.getKey());
-                        if(!names.contains(beach))  names.add(beach);
-                        desc.add(String.valueOf(sight.child("Info").getValue()));
-                        hasSights = false;
+                for (DataSnapshot nswe : snapshot.getChildren()){
+                    for(DataSnapshot  snap : nswe.child("Beaches").getChildren()){
+                        String beachen = String.valueOf(snap.getKey());
+                        String beachel = String.valueOf(snap.child("NameTrans").getValue());
+                        Log.i("Beach el",beachel);
+                        if(!beach_names.contains(beachen)) {
+                            beach_names.add(beachen);
+                            gr_beach_names.add(beachel);
+                            beaches_desc.add(String.valueOf(snap.child("Info").getValue()));
+                        }
+                        Log.i("names", String.valueOf(beach_names));
                     }
-                    for (DataSnapshot sight : snap.child("Villages").getChildren()) {
-                        String village = String.valueOf(sight.getKey());
-                        if(!names.contains(village))  names.add(village);
-                        desc.add(String.valueOf(sight.child("Info").getValue()));
-                        hasSights = true;
+                    for (DataSnapshot snap : nswe.child("Villages").getChildren()) {
+                        String villagen = String.valueOf(snap.getKey());
+                        String villagel=String.valueOf(snap.child("NameTrans").getValue());
+                        if(!villages_names.contains(villagen)) {
+                            villages_names.add(villagen);
+                            gr_villages_names.add(villagel);
+                            villages_desc.add(String.valueOf(snap.child("Info").getValue()));
+                        }
                     }
-                    Log.i("storage",String.valueOf(names));
+                    Log.i("vill el", String.valueOf(villages_names));
                 }
 
-                for(int i=0; i<names.size(); i++){
-                    count+=1;
-                    int progress =  Math.round(count/names.size());
 
-                    String imgname = names.get(i).toLowerCase();
+                 for(int i=0; i<beach_names.size(); i++){
+                    count ++;
+                    String imgname = beach_names.get(i).toLowerCase();
                     if (imgname.contains(" ")) imgname = imgname.replace(" ","_");
                     String imgpath = imgname;
                     imgname = (new StringBuilder().append(imgname).append(".jpg")).toString();
                     Log.i("imagename",imgname);
+
                     try{
                         File localfile = File.createTempFile("tmp","jpg") ;
                         StorageReference imgref = storageRef.child("img/"+ imgname);
                         int finalI = i;
                         String finalImgname = imgname;
-                        boolean finalVill = hasSights;
                         imgref.getFile(localfile).addOnSuccessListener(taskSnapshot ->cards(mainactivity,
                                 BitmapFactory.decodeFile(localfile.getAbsolutePath()),
-                                names.get(finalI),
-                                desc.get(finalI),
+                                beach_names.get(finalI),
+                                beaches_desc.get(finalI),
                                 finalImgname,
-                                finalVill));
+                                false,
+                                beaches_cardholder,
+                                gr_beach_names.get(finalI)));
 
                     }catch (IOException e){
                         e.printStackTrace();
                     }
-                    if(progress<1){
-                        progressBar.setProgress(progress);
-                        Log.i("progress",String.valueOf(progress));
-                    }
-                    else progressBar.setVisibility(View.INVISIBLE);
+            }
+
+             for(int i=0; i<villages_names.size(); i++){
+                count ++;
+                String imgname = villages_names.get(i).toLowerCase();
+                if (imgname.contains(" ")) imgname = imgname.replace(" ","_");
+                String imgpath = imgname;
+                imgname = (new StringBuilder().append(imgname).append(".jpg")).toString();
+                Log.i("imagename",imgname);
+                try{
+                    File localfile = File.createTempFile("tmp","jpg") ;
+                    StorageReference imgref = storageRef.child("img/"+ imgname);
+                    int finalI = i;
+                    String finalImgname = imgname;
+                    imgref.getFile(localfile).addOnSuccessListener(taskSnapshot ->cards(mainactivity,
+                            BitmapFactory.decodeFile(localfile.getAbsolutePath()),
+                            villages_names.get(finalI),
+                            villages_desc.get(finalI),
+                            finalImgname,
+                            true,
+                            villages_cardholder,
+                            gr_villages_names.get(finalI)));
+
+                }catch (IOException e){
+                    e.printStackTrace();
                 }
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.i("fire_error",error.getMessage());
-            }
-        });
+                int progress =  Math.round(count/(beach_names.size()+villages_names.size()));
+                if(progress<1){
+                    progressBar.setProgress(progress);
+                    Log.i("progress",String.valueOf(progress));
+                }
+                else {
+                    ConstraintLayout layout = findViewById(R.id.mainLayout);
+                    layout.setAlpha(1);
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+        }
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.i("fire_error",error.getMessage());
+        }
+    });
+
     }
 
 
-    public void cards(Context context, Bitmap background, String name,String description, String imgpath,boolean village){
+    public void cards(Context context, Bitmap background, String name,String description, String imgpath,boolean village,LinearLayout cardholder,String gr_name){
         cardview=new CardView(context);
         cardview.setRadius(0);
         cardview.setPadding(0, 0, 0, 0);
@@ -183,7 +252,12 @@ public class MainActivity extends AppCompatActivity {
         cardview.addView(cardimage);
 
         cardtext = new TextView(context);
-        cardtext.setText(name);
+        if (name.contains(" ")) name = name.replace(" ", "\n");
+        String[] systemLangs = Resources.getSystem().getConfiguration().getLocales().toLanguageTags().split(",");
+
+        if (systemLangs[0].contains(Locale.forLanguageTag("EL").toLanguageTag())) cardtext.setText(gr_name);
+        else cardtext.setText(name);
+
         cardtext.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         cardtext.setTextColor(Color.WHITE);
         cardtext.setPadding(10,430,10,0);
@@ -195,7 +269,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this,InfoActivity.class).putExtra("id", finalName).
                     putExtra("description",description).
                     putExtra("path",imgpath).
-                    putExtra("village",village));
+                    putExtra("village",village).
+                    putExtra("gr_name",gr_name));
         });
 
         cardholder.addView(cardview,llayoutparams);

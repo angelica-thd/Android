@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tour Guide</string>
+    <string name="app_name">Lesbos Guide</string>
     <string name="island">Lesbos</string>
     <string name="island_info">It is a fertile island, overgrown with pine trees and olive groves, with intense landscapes.</string>
     <string name="tomain">Let \'s explore</string>
@@ -10,6 +10,8 @@
     <string name="favs_bottom_bar">Favourites</string>
     <string name="history_bottom_bar">History</string>
     <string name="settings_button">Settings</string>
+    <string name="user_loc">Find your location.</string>
+    <string name="point_loc">FInd the sight\'s location.</string>
     <string name="sights_textview">Sights</string>
     <string name="beaches_textview">Beaches</string>
     <string name="villages_textview">Villages</string>
@@ -20,6 +22,6 @@
     <string name="waiting_message">We are still searching... Please wait</string>
     <string name="what2see">"What to see in "</string>
     <string name="toocold">It\'s too cold to go for swimming</string>
-    <string name="no_beach">There are no beaches starting with</string>
-    <string name="no_villages">There are no villages starting with</string>
+    <string name="no_beach">"There are no beaches starting with "</string>
+    <string name="no_villages">"There are no villages starting with "</string>
 </resources>
