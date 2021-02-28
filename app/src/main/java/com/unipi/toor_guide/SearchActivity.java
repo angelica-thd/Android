@@ -208,6 +208,7 @@ public class SearchActivity extends AppCompatActivity {
                         }
                     }
 
+                 
                     if(beach_names.isEmpty()){
                         no_beaches.setVisibility(View.VISIBLE);
                         no_beaches.setText(getText(R.string.no_beach)+search_text.getText().toString());
