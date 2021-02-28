@@ -54,7 +54,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //night mode ui is not supported
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -75,6 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         name = getIntent().getStringExtra("name");
+        Log.i("/map",name);
         grname = getIntent().getStringExtra("grname");
         Bundle b = getIntent().getExtras();
         loc = (LatLng) b.get("loc");

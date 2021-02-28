@@ -46,6 +46,7 @@ public class FavouritesActivity extends AppCompatActivity {
     private FirebaseRemoteConfig remoteConfig;
     private FirebaseDatabase firedb;
     private DatabaseReference ref;
+    private Integer wascalled = 0;
 
     private SQLiteDatabase db;
     private List<String> fav_list=new ArrayList<>();
@@ -67,6 +68,7 @@ public class FavouritesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
 
+        //bottom bar
         bottomBar=findViewById(R.id.bottombar);
         bottomBar.getMenu().getItem(2).setChecked(true);
         bottomBar.setOnNavigationItemSelectedListener(item -> {
@@ -83,6 +85,9 @@ public class FavouritesActivity extends AppCompatActivity {
             return item.getItemId() == R.id.Favourites;
         });
 
+
+
+        //layout
         llayoutparams = new LinearLayout.LayoutParams(
                 550,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -91,6 +96,9 @@ public class FavouritesActivity extends AppCompatActivity {
 
         no_fav_yet=findViewById(R.id.no_favourites_textview);
         cardholder=findViewById(R.id.fav_llayout);
+
+
+
 
         storageRef = FirebaseStorage.getInstance().getReference();
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //night mode ui is not supported
@@ -107,14 +115,6 @@ public class FavouritesActivity extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS favs(name TEXT)");
 
 
-        fav_list_update_fun();
-        if(fav_list.size()==0){
-            no_fav_yet.setVisibility(View.VISIBLE);
-        }
-        else{
-            no_fav_yet.setVisibility(View.INVISIBLE);
-            addcards();
-        }
     }
 
     @Override
@@ -126,9 +126,9 @@ public class FavouritesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("logs/onresume","on resume was called");
         bottomBar.getMenu().getItem(2).setChecked(true);
         fav_list.clear();
-
         if(cardholder.getChildCount()>0) cardholder.removeAllViews();
         fav_names.clear();
         gr_fav_names.clear();
@@ -144,7 +144,9 @@ public class FavouritesActivity extends AppCompatActivity {
         }
     }
 
+    //gets all the favs from the db, puts them to list
     private void fav_list_update_fun(){
+        fav_list.clear();
         Cursor cursor = db.rawQuery("select * from favs ", new String[]{});
         if(cursor.getCount()>0){
             while (cursor.moveToNext())
@@ -153,6 +155,8 @@ public class FavouritesActivity extends AppCompatActivity {
     }
 
     private void addcards(){
+        Log.i("logs/addcards","addcards was called ");
+        wascalled+=1;
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -178,9 +182,9 @@ public class FavouritesActivity extends AppCompatActivity {
                         }
                     }
                 }
+                Log.i("logs/fav_names",String.valueOf(fav_names)+fav_list);
 
                 for(int i=0; i<fav_names.size(); i++){
-
                     String imgname = fav_names.get(i).toLowerCase();
                     if (imgname.contains(" ")) imgname = imgname.replace(" ","_");
                     String imgpath = imgname;

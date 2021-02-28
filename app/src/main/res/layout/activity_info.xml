@@ -24,7 +24,7 @@
 
 
             <RelativeLayout
-                android:id="@+id/linear"
+                android:id="@+id/relative"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -55,43 +55,27 @@
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:id="@+id/add2tourButton"
-                    android:layout_width="70dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="0dp"
-                    android:backgroundTint="#00FFFFFF"
-                    android:onClick="add2tour"
-                    android:src="@drawable/ic_baseline_add_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/info_img"
-                    app:layout_constraintEnd_toStartOf="@+id/favButton"
-                    tools:srcCompat="@drawable/ic_baseline_add_24" />
-
-                <ImageButton
-                    android:id="@+id/find"
+                    android:id="@+id/find_sight_on_map"
                     android:layout_width="70dp"
                     android:layout_height="60dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="-2dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="441dp"
                     android:layout_toStartOf="@+id/favButton"
                     android:background="#00FFFFFF"
                     android:onClick="find"
                     android:tint="@color/white"
                     app:layout_constraintBottom_toBottomOf="@+id/info_img"
-                    app:layout_constraintEnd_toEndOf="parent"
                     tools:srcCompat="@drawable/ic_baseline_not_listed_location_24" />
 
                 <ImageButton
                     android:id="@+id/favButton"
                     android:layout_width="70dp"
                     android:layout_height="60dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_toStartOf="@+id/add2tourButton"
+                    android:layout_marginEnd="-1dp"
+                    android:layout_marginBottom="-1dp"
                     android:background="#00FFFFFF"
                     android:onClick="favourite"
                     android:src="@drawable/ic_baseline_favorite_border_24"
@@ -100,10 +84,21 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:srcCompat="@drawable/ic_baseline_favorite_border_24" />
 
+                <ImageButton
+                    android:id="@+id/imageButton_find"
+                    android:layout_width="70dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="441dp"
+                    android:background="#00FFFFFF"
+                    android:onClick="find"
+                    android:tint="@color/white"
+                    android:src="@drawable/ic_baseline_location_on_24" />
+
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/what2see"
+                android:id="@+id/what2see_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/description"
@@ -118,7 +113,7 @@
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="600dp"
-                android:layout_below="@+id/what2see"
+                android:layout_below="@+id/what2see_text"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
@@ -126,21 +121,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/what2see" />
+                app:layout_constraintTop_toBottomOf="@id/what2see_text" />
 
 
             <TextView
                 android:id="@+id/description"
                 android:layout_width="346dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linear"
+                android:layout_below="@+id/relative"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="TextView"
                 app:layout_constraintBottom_toTopOf="@id/listView"
-                app:layout_constraintTop_toBottomOf="@id/linear" />
+                app:layout_constraintTop_toBottomOf="@id/relative" />
 
 
         </RelativeLayout>

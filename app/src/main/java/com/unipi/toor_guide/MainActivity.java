@@ -129,12 +129,12 @@ public class MainActivity extends AppCompatActivity {
 
         List<String>  beaches_desc = new ArrayList<>();
         List<String>  villages_desc = new ArrayList<>();
+        List<Boolean> hasSights= new ArrayList<>();
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int count = 0;
-                boolean hasSights = false;
 
                 Log.i("datasnapshot","cool");
                 for (DataSnapshot nswe : snapshot.getChildren()){
@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                             beach_names.add(beachen);
                             gr_beach_names.add(beachel);
                             beaches_desc.add(String.valueOf(snap.child("Info").getValue()));
+                            hasSights.add(false);
                         }
                         Log.i("names", String.valueOf(beach_names));
                     }
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                                 beach_names.get(finalI),
                                 beaches_desc.get(finalI),
                                 finalImgname,
-                                false,
+                                hasSights.get(finalI),
                                 beaches_cardholder,
                                 gr_beach_names.get(finalI)));
 
