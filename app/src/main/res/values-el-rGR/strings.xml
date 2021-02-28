@@ -24,4 +24,6 @@
     <string name="favs_bottom_bar">Αγαπημένα</string>
     <string name="user_loc">Βρείτε την τοποθεσία σας.</string>
     <string name="point_loc">Βρείτε την τοποθε΄σία του προορισμού.</string>
+    <string name="favourites_textview">Αγαπημένα</string>
+    <string name="no_favourites_textview">Δεν υπάρχουν ακόμα αγαπημένα</string>
 </resources>

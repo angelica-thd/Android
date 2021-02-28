@@ -100,7 +100,7 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
             }
             if(item.getItemId()==R.id.Favourites){
-                startActivity(new Intent(getApplicationContext(),CreateTourActivity.class));
+                startActivity(new Intent(getApplicationContext(),FavouritesActivity.class));
                 overridePendingTransition(0,0);
                 return true;
             }
@@ -126,6 +126,7 @@ public class SearchActivity extends AppCompatActivity {
         search_button=findViewById(R.id.search_button);
         search_button.setOnLongClickListener(view -> {
             recognize();
+            search_fun();
             return true;
         });
 
@@ -352,15 +353,13 @@ public class SearchActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==REC_RESULT && resultCode==RESULT_OK){
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (matches.contains("tours") || matches.contains("tour")){
-                startActivity(new Intent(this, CreateTourActivity.class));
+            if (matches.contains("favourites") || matches.contains("favorites") || matches.contains("αγαπημένα")){
+                startActivity(new Intent(this, FavouritesActivity.class));
             }
-            else if (matches.contains("sights") ||  matches.contains("sight")){
+            else if (matches.contains("home") ||matches.contains("sights") || matches.contains("αξιοθέατα") || matches.contains("αρχική")){
                 startActivity(new Intent(this, MainActivity.class));
             }
-            else if (matches.contains("settings")){
-                startActivity(new Intent(this, SettingsActivity.class));
-            }else{
+            else{
                 search_text.setText(matches.get(0));
             }
         }

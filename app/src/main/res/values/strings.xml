@@ -15,7 +15,6 @@
     <string name="sights_textview">Sights</string>
     <string name="beaches_textview">Beaches</string>
     <string name="villages_textview">Villages</string>
-    <!-- TODO: Remove or change this placeholder text -->
 
     <string name="title_activity_maps">Map</string>
     <string name="map_not_ready">The map has not loaded yet, plase, wait.</string>
@@ -24,4 +23,7 @@
     <string name="toocold">It\'s too cold to go for swimming</string>
     <string name="no_beach">"There are no beaches starting with "</string>
     <string name="no_villages">"There are no villages starting with "</string>
+    <string name="favourites_textview">Favourites</string>
+    <string name="tours_bottom_bar">Tours</string>
+    <string name="no_favourites_textview">There are no favourites yet</string>
 </resources>

@@ -9,37 +9,5 @@
     android:fitsSystemWindows="true"
     tools:context=".CreateTourActivity">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottombar"
-        android:layout_width="338dp"
-        android:layout_height="59dp"
-        android:layout_gravity="bottom"
-        android:layout_margin="30dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/rectangled"
-        app:elevation="2dp"
-        app:itemIconSize="35dp"
-        app:itemIconTint="@drawable/items_selector"
-        app:itemRippleColor="@android:color/transparent"
-        app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_items" />
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/settingsbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/skyblue"
-        android:contentDescription="@string/settings_button"
-        android:src="@drawable/ic_baseline_settings_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
