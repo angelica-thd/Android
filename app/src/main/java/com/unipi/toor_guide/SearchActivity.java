@@ -100,7 +100,7 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
             }
             if(item.getItemId()==R.id.Favourites){
-                startActivity(new Intent(getApplicationContext(),CreateTourActivity.class));
+                startActivity(new Intent(getApplicationContext(),FavouritesActivity.class));
                 overridePendingTransition(0,0);
                 return true;
             }
