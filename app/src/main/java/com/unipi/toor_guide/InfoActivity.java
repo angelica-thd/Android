@@ -78,7 +78,7 @@ import java.util.Locale;
 public class InfoActivity extends AppCompatActivity implements SensorEventListener {
 
     TextView textView,description,what2see;
-    ImageButton find,fav;
+    ImageButton findBeach ,fav;
     private StorageReference storageRef;
     private FirebaseRemoteConfig remoteConfig;
     private FirebaseDatabase firedb;
@@ -94,11 +94,9 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
     ListView sightList;
 
     private boolean isFavourite,hasSights ;
-    private List<String> sight_names = new ArrayList<>();
-    private List<String> sight_info_en = new ArrayList<>();
-    private List<String> sight_info_gr = new ArrayList<>();
     private String name;
     private SQLiteDatabase db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +105,9 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
 
         hasSights = getIntent().getBooleanExtra("village",false);
         sightList = findViewById(R.id.listView);
-        find = findViewById(R.id.find);
+        findBeach =  findViewById(R.id.find_sight_on_map);
+
+        what2see = findViewById(R.id.what2see_text);
         fav = findViewById(R.id.favButton);
         firedb = FirebaseDatabase.getInstance();
         ref = firedb.getReference();
@@ -116,22 +116,17 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         db = openOrCreateDatabase("FavouriteSights", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS favs(name TEXT)");
 
+
         info_img = findViewById(R.id.info_img);
 
         isFavourite = false; //should get from user info
 
         textView = findViewById(R.id.id);
         description = findViewById(R.id.description);
-        what2see = findViewById(R.id.what2see);
-        if(!hasSights){
-            what2see.setVisibility(View.INVISIBLE);
-            find.setVisibility(View.VISIBLE);
-        }
-        else{
-            what2see.setVisibility(View.VISIBLE);
-            find.setVisibility(View.INVISIBLE);
-        }
 
+
+
+        if(hasSights) findBeach.setClickable(false);
         mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         mTemperatureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 
@@ -153,12 +148,17 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
 
         Cursor cursor = db.rawQuery("select * from favs ", new String[]{});
         if(cursor.getCount()>0) {
-            while (cursor.moveToNext())
-
-                if(name.contains(cursor.getString(0))){
+            while (cursor.moveToNext()) {
+                if (name.contains("\n")) name = name.replace("\n", " ");
+                if (cursor.getString(0).contains(name)) {
+                    Log.i("name", name);
                     isFavourite = true;
-                    fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_24));
                 }
+            }
+        }
+        Log.i("name",name);
+        if (isFavourite){
+           fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_24));
         }
 
         Log.i("lang", Resources.getSystem().getConfiguration().getLocales().toLanguageTags()+ Locale.forLanguageTag("EL").toLanguageTag());
@@ -236,12 +236,9 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    public void add2tour(View view){
-        startActivity(new Intent(this,CreateTourActivity.class));
-    }
+
 
     public void find(View view){
-
         if(name.contains("\n")) name = name.replace("\n"," ");
         ref.addValueEventListener(new ValueEventListener() {
             Sight sight = null;
@@ -262,7 +259,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
                             startActivity(new Intent(InfoActivity.this,MapsActivity.class).
                                     putExtra("name",name).
                                     putExtra("loc",loc));
-                            Log.i("sight", String.valueOf(sight));
+                            Log.i("sight", name);
 
                             break;
                         }
