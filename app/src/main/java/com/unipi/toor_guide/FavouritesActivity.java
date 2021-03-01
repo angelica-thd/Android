@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -85,11 +86,12 @@ public class FavouritesActivity extends AppCompatActivity {
             return item.getItemId() == R.id.Favourites;
         });
 
-
-
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
         //layout
         llayoutparams = new LinearLayout.LayoutParams(
-                550,
+                (int) Math.round(width-width*2/5),
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
         llayoutparams.setMargins(10,0,10,0);

@@ -219,8 +219,8 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
     public void favourite(View view){
         boolean exists = false;
         un_favourite();
+        if(name.contains("\n")) name = name.replace("\n"," ");
         if(isFavourite){
-            if(name.contains("\n")) name = name.replace("\n"," ");
             fav.setImageDrawable(getDrawable(R.drawable.ic_baseline_favorite_24));
 
             Cursor cursor = db.rawQuery("select * from favs ", new String[]{});
