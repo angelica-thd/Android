@@ -105,7 +105,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
 
         hasSights = getIntent().getBooleanExtra("village",false);
         sightList = findViewById(R.id.listView);
-        findBeach =  findViewById(R.id.find_sight_on_map);
+        findBeach =  findViewById(R.id.imageButton_find);
 
         what2see = findViewById(R.id.what2see_text);
         fav = findViewById(R.id.favButton);
@@ -127,6 +127,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
 
 
         if(hasSights) findBeach.setClickable(false);
+        if(hasSights) findBeach.setImageDrawable(null);
         mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         mTemperatureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 

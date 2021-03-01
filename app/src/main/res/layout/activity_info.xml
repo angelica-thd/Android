@@ -55,20 +55,6 @@
                     android:textStyle="bold" />
 
                 <ImageButton
-                    android:id="@+id/find_sight_on_map"
-                    android:layout_width="70dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="441dp"
-                    android:layout_toStartOf="@+id/favButton"
-                    android:background="#00FFFFFF"
-                    android:onClick="find"
-                    android:tint="@color/white"
-                    app:layout_constraintBottom_toBottomOf="@+id/info_img"
-                    tools:srcCompat="@drawable/ic_baseline_not_listed_location_24" />
-
-                <ImageButton
                     android:id="@+id/favButton"
                     android:layout_width="70dp"
                     android:layout_height="60dp"
@@ -89,11 +75,12 @@
                     android:layout_width="70dp"
                     android:layout_height="60dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="441dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/favButton"
                     android:background="#00FFFFFF"
                     android:onClick="find"
-                    android:tint="@color/white"
-                    android:src="@drawable/ic_baseline_location_on_24" />
+                    android:src="@drawable/ic_baseline_location_on_24"
+                    android:tint="@color/white" />
 
             </RelativeLayout>
 
