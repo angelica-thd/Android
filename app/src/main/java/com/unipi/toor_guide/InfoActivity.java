@@ -126,8 +126,6 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
 
 
 
-        if(hasSights) findBeach.setClickable(false);
-        if(hasSights) findBeach.setImageDrawable(null);
         mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         mTemperatureSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 
@@ -168,18 +166,27 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
         if (systemLangs[0].contains(Locale.forLanguageTag("EL").toLanguageTag())){
             description.setText(gr_desc);
             String gr_name = getIntent().getStringExtra("gr_name");
+            if(hasSights){
+                what2see.setText(getString(R.string.what2see)+gr_name);
+            }
             if(gr_name.contains(" ")) {
                 gr_name = gr_name.replace(" ","\n");
             }
             textView.setText(gr_name);
         }
         else{
+            if(hasSights){
+                what2see.setText(getString(R.string.what2see)+name);
+            }
             description.setText(en_desc);
             if(name.contains(" ")) name = name.replace(" ","\n");
             textView.setText(name);
-
         }
 
+        if(hasSights) {
+            findBeach.setClickable(false);
+            findBeach.setImageDrawable(null);
+        }
 
 
         s = new Sight();
