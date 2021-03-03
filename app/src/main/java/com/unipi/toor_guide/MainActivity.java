@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -33,7 +32,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -54,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomBar;
 
-    LinearLayout cardholder;
     CardView cardview;
     LinearLayout.LayoutParams llayoutparams;
     TextView beach_textview;
@@ -136,19 +133,16 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int count = 0;
 
-                Log.i("datasnapshot","cool");
                 for (DataSnapshot nswe : snapshot.getChildren()){
                     for(DataSnapshot  snap : nswe.child("Beaches").getChildren()){
                         String beachen = String.valueOf(snap.getKey());
                         String beachel = String.valueOf(snap.child("NameTrans").getValue());
-                        Log.i("Beach el",beachel);
                         if(!beach_names.contains(beachen)) {
                             beach_names.add(beachen);
                             gr_beach_names.add(beachel);
                             beaches_desc.add(String.valueOf(snap.child("Info").getValue()));
                             hasSights.add(false);
                         }
-                        Log.i("names", String.valueOf(beach_names));
                     }
                     for (DataSnapshot snap : nswe.child("Villages").getChildren()) {
                         String villagen = String.valueOf(snap.getKey());
@@ -159,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
                             villages_desc.add(String.valueOf(snap.child("Info").getValue()));
                         }
                     }
-                    Log.i("vill el", String.valueOf(villages_names));
                 }
 
 
@@ -169,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
                     if (imgname.contains(" ")) imgname = imgname.replace(" ","_");
                     String imgpath = imgname;
                     imgname = (new StringBuilder().append(imgname).append(".jpg")).toString();
-                    Log.i("imagename",imgname);
 
                     try{
                         File localfile = File.createTempFile("tmp","jpg") ;
@@ -196,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
                 if (imgname.contains(" ")) imgname = imgname.replace(" ","_");
                 String imgpath = imgname;
                 imgname = (new StringBuilder().append(imgname).append(".jpg")).toString();
-                Log.i("imagename",imgname);
                 try{
                     File localfile = File.createTempFile("tmp","jpg") ;
                     StorageReference imgref = storageRef.child("img/"+ imgname);
@@ -218,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
                 int progress =  Math.round(count/(beach_names.size()+villages_names.size()));
                 if(progress<1){
                     progressBar.setProgress(progress);
-                    Log.i("progress",String.valueOf(progress));
                 }
                 else {
                     ConstraintLayout layout = findViewById(R.id.mainLayout);

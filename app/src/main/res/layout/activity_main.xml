@@ -45,15 +45,6 @@
         app:menu="@menu/menu_items" />
 
 
-    <!--
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-    -->
 
     <HorizontalScrollView
         android:id="@+id/beaches_hsv1"
@@ -130,14 +121,6 @@
         app:layout_constraintHorizontal_bias="0.057"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-    <!--
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        </ScrollView>
-    -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

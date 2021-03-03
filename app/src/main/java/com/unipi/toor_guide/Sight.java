@@ -1,9 +1,6 @@
 package com.unipi.toor_guide;
 
-import android.content.Intent;
-import android.location.Location;
 import android.util.Log;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
@@ -50,7 +47,6 @@ public class Sight {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                Log.i("datasnapshot","cool");
                 for (DataSnapshot snap: snapshot.getChildren()){
                     for (DataSnapshot village : snap.child("Villages").getChildren()) {
                         if(name.equals(String.valueOf(village.getKey())))
