@@ -5,21 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -30,7 +24,6 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -47,8 +40,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static android.widget.Toast.LENGTH_LONG;
 
 public class SearchActivity extends AppCompatActivity {
     BottomNavigationView bottomBar;
@@ -191,7 +182,6 @@ public class SearchActivity extends AppCompatActivity {
                         for(DataSnapshot  sight : snap.child("Beaches").getChildren()){
                             String beachen = String.valueOf(sight.getKey());
                             String beachel = String.valueOf(sight.child("NameTrans").getValue());
-                            Log.i("Beach el",beachel);
                             if((beachen.toLowerCase().contains(search_text.getText().toString().toLowerCase())||beachel.toLowerCase().contains(search_text.getText().toString().toLowerCase()))&&!beach_names.contains(beachen)) {
                                 beach_names.add(beachen);
                                 gr_beach_names.add(beachel);
@@ -230,7 +220,6 @@ public class SearchActivity extends AppCompatActivity {
                         if (imgname.contains(" ")) imgname = imgname.replace(" ","_");
                         String imgpath = imgname;
                         imgname = (new StringBuilder().append(imgname).append(".jpg")).toString();
-                        Log.i("imagename",imgname);
 
                         try{
                             File localfile = File.createTempFile("tmp","jpg") ;
@@ -258,7 +247,6 @@ public class SearchActivity extends AppCompatActivity {
                         if (imgname.contains(" ")) imgname = imgname.replace(" ","_");
                         String imgpath = imgname;
                         imgname = (new StringBuilder().append(imgname).append(".jpg")).toString();
-                        Log.i("imagename",imgname);
                         try{
                             File localfile = File.createTempFile("tmp","jpg") ;
                             StorageReference imgref = storageRef.child("img/"+ imgname);

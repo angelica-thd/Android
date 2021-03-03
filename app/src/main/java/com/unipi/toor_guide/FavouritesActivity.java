@@ -19,7 +19,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -128,7 +127,6 @@ public class FavouritesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("logs/onresume","on resume was called");
         bottomBar.getMenu().getItem(2).setChecked(true);
         fav_list.clear();
         if(cardholder.getChildCount()>0) cardholder.removeAllViews();
@@ -157,7 +155,6 @@ public class FavouritesActivity extends AppCompatActivity {
     }
 
     private void addcards(){
-        Log.i("logs/addcards","addcards was called ");
         wascalled+=1;
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -184,7 +181,6 @@ public class FavouritesActivity extends AppCompatActivity {
                         }
                     }
                 }
-                Log.i("logs/fav_names",String.valueOf(fav_names)+fav_list);
 
                 for(int i=0; i<fav_names.size(); i++){
                     String imgname = fav_names.get(i).toLowerCase();

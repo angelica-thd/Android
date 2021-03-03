@@ -6,8 +6,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Address;
@@ -16,23 +14,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -74,7 +64,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         name = getIntent().getStringExtra("name");
-        Log.i("/map",name);
         grname = getIntent().getStringExtra("grname");
         Bundle b = getIntent().getExtras();
         loc = (LatLng) b.get("loc");
@@ -94,7 +83,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fabloc_point = findViewById(R.id.floating_point_location);
 
         fabloc_user.setOnClickListener(view -> {
-            Log.i("loc",String.valueOf(current_loc));
             if(current_loc!=null){
                 MarkerOptions my_options = new MarkerOptions().position(current_loc).title("You are here.");
                 my_options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
@@ -163,7 +151,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(@NonNull Location location) {
         if (location!=null){
-            Log.i("loc",String.valueOf(location));
             current_loc = new LatLng(location.getLatitude(),location.getLongitude());
 
         }
