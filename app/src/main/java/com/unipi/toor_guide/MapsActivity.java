@@ -83,11 +83,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fabloc_point = findViewById(R.id.floating_point_location);
 
         fabloc_user.setOnClickListener(view -> {
-            if(current_loc!=null){
-                MarkerOptions my_options = new MarkerOptions().position(current_loc).title("You are here.");
-                my_options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                mMap.addMarker(my_options);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current_loc,15));
+            if(mMap!=null){
+                if(current_loc!=null){
+                    MarkerOptions my_options = new MarkerOptions().position(current_loc).title(getString(R.string.mypos));
+                    my_options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                    mMap.addMarker(my_options);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current_loc,15));
+                } else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
+
             } else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
 
         });
@@ -97,11 +100,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return true;
         });
         fabloc_point.setOnClickListener(view -> {
-             if(loc!=null){
-                mMap.addMarker(new MarkerOptions().position(loc).title(name+" is here."));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc,15));
-            }
-             else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
+            if(mMap!=null){
+                if(loc!=null){
+                    if (systemLangs[0].contains(Locale.forLanguageTag("EL").toLanguageTag()))
+                        mMap.addMarker(new MarkerOptions().position(loc).title(grname));
+                    else
+                        mMap.addMarker(new MarkerOptions().position(loc).title(name));
+
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc,15));
+                }
+                else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
+            } else Toast.makeText(this,R.string.map_not_ready,Toast.LENGTH_LONG).show();
+
         });
         fabloc_point.setOnLongClickListener(view -> {
             Toast.makeText(this,

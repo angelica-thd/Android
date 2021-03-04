@@ -57,7 +57,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
     ListView sightList;
 
     private boolean isFavourite,hasSights ;
-    private String name;
+    private String name,gr_name;
     private SQLiteDatabase db;
 
 
@@ -124,7 +124,7 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
 
         if (systemLangs[0].contains(Locale.forLanguageTag("EL").toLanguageTag())){
             description.setText(gr_desc);
-            String gr_name = getIntent().getStringExtra("gr_name");
+            gr_name = getIntent().getStringExtra("gr_name");
             if(hasSights){
                 what2see.setText(getString(R.string.what2see)+gr_name);
             }
@@ -224,7 +224,8 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
                                     loc,null);
                             startActivity(new Intent(InfoActivity.this,MapsActivity.class).
                                     putExtra("name",name).
-                                    putExtra("loc",loc));
+                                    putExtra("loc",loc).
+                                    putExtra("grname",gr_name));
 
                             break;
                         }
@@ -243,7 +244,8 @@ public class InfoActivity extends AppCompatActivity implements SensorEventListen
                                         loc,null);
                                 startActivity(new Intent(InfoActivity.this,MapsActivity.class).
                                         putExtra("name",name).
-                                        putExtra("loc",loc));
+                                        putExtra("loc",loc).
+                                        putExtra("grname",gr_name));
                                 break;
                             }
                         }

@@ -26,4 +26,5 @@
     <string name="point_loc">Βρείτε την τοποθε΄σία του προορισμού.</string>
     <string name="favourites_textview">Αγαπημένα</string>
     <string name="no_favourites_textview">Δεν υπάρχουν ακόμα αγαπημένα</string>
+    <string name="mypos">Εσείς.</string>
 </resources>
